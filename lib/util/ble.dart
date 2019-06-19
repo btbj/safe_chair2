@@ -21,7 +21,7 @@ mixin BleMixin on ChangeNotifier {
 
   StreamSubscription _scanSubscription;
   StreamSubscription get scanSubscription => _scanSubscription;
-  final scanStateSubject = BehaviorSubject<bool>();
+  final scanStateSubject = BehaviorSubject<bool>.seeded(false);
   // bool _scanning = false;
   // bool get scanning => _scanning;
   Map<DeviceIdentifier, ScanResult> _scanResults = Map();
@@ -92,6 +92,7 @@ mixin BleMixin on ChangeNotifier {
     _scanSubscription?.cancel();
     _scanSubscription = null;
     scanStateSubject.close();
+    // _scanning = false;
     _deviceConnection?.cancel();
     _deviceConnection = null;
     deviceStateSubject.close();
@@ -103,9 +104,11 @@ mixin BleMixin on ChangeNotifier {
     print('start scan');
     this._scanResults.clear();
     this.scanStateSubject.add(true);
+    // _scanning = true;
     _scanSubscription =
         _flutterBlue.scan(timeout: Duration(seconds: 10)).listen((scanResult) {
       this._scanResults[scanResult.device.id] = scanResult;
+      // print('found one');
       notifyListeners();
     }, onDone: stopScan);
     notifyListeners();
@@ -116,6 +119,7 @@ mixin BleMixin on ChangeNotifier {
     await _scanSubscription?.cancel();
     _scanSubscription = null;
     this.scanStateSubject.add(false);
+    // _scanning = false;
     notifyListeners();
     return;
   }
@@ -240,12 +244,14 @@ mixin BleMixin on ChangeNotifier {
     print('start scan');
     this._scanResults.clear();
     this.scanStateSubject.add(true);
+    // this._scanning = true;
     _scanSubscription =
         _flutterBlue.scan(timeout: Duration(seconds: 60)).listen((scanResult) {
       if (scanResult.device.id == targetDevice.id &&
           scanResult.advertisementData.connectable) {
         connect(scanResult.device);
         this.scanStateSubject.add(false);
+        // this._scanning = false;
       }
       notifyListeners();
     }, onDone: stopScan);

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:safe_chair2/model/ChairState.dart';
+// import 'package:safe_chair2/model/ChairState.dart';
 import 'package:safe_chair2/model/TemperatureMonitor.dart';
 import 'package:safe_chair2/model/Chair.dart';
 // import 'package:safe_chair2/util/service.dart' as service;
-// import 'package:safe_chair2/util/ble.dart';
+import 'package:safe_chair2/util/ble.dart';
 
-class ChairControlInfo with ChangeNotifier {
+class ChairControlInfo with ChangeNotifier, BleMixin{
   ChairControlInfo() {
-    // this.initBle();
+    this.initBle();
     _temperatureMonitor = TemperatureMonitor();
   }
-  ChairState _chairState;
-  ChairState get chairState => _chairState;
-  bool get connected => _chairState != null;
+  // ChairState _chairState;
+  // ChairState get chairState => _chairState;
+  // bool get connected => _chairState != null;
 
   bool hasBleError = false;
   bool hasNotificationError = false;
