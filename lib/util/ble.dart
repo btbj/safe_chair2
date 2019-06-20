@@ -34,11 +34,12 @@ mixin BleMixin on ChangeNotifier {
   BluetoothState get state => _state;
 
   BluetoothDevice _device;
-  BluetoothDevice get device => this._device;
+  BluetoothDevice get connectedDevice => this._device;
   StreamSubscription<BluetoothDeviceState> _deviceConnection;
   StreamSubscription<BluetoothDeviceState> _deviceStateSubscription;
   final deviceStateSubject = BehaviorSubject<BluetoothDeviceState>.seeded(
       BluetoothDeviceState.disconnected);
+  final connectingStateSubject = BehaviorSubject<bool>.seeded(true);
 
   List<BluetoothService> services = List();
   StreamSubscription<List<int>> valueChangedSubscriptions;
@@ -68,13 +69,14 @@ mixin BleMixin on ChangeNotifier {
 
     _stateSubscription = _flutterBlue.onStateChanged().listen((s) async {
       _state = s;
-      notifyListeners();
       if (s == BluetoothState.off) {
+        this.clearChairState();
         await this.disconnect();
         print('close ble');
         this.stateSubject.add(s);
         notificationManager.show('蓝牙已关闭');
       }
+      notifyListeners();
     });
 
     var _currentState = await _flutterBlue.state;
@@ -95,6 +97,7 @@ mixin BleMixin on ChangeNotifier {
     // _scanning = false;
     _deviceConnection?.cancel();
     _deviceConnection = null;
+    connectingStateSubject.close();
     deviceStateSubject.close();
   }
 
@@ -133,18 +136,20 @@ mixin BleMixin on ChangeNotifier {
 
     final currentDeviceState = await targetDevice.state;
     this.deviceStateSubject.add(currentDeviceState);
-    notifyListeners();
+    // notifyListeners();
+    connectingStateSubject.add(true);
 
     _deviceStateSubscription = targetDevice.onStateChanged().listen((s) async {
       this.deviceStateSubject.add(s);
-      notifyListeners();
+      // notifyListeners();
       if (s == BluetoothDeviceState.connected) {
         this._device = targetDevice;
         // await StoreManager.saveLastConnectedDevice(targetDevice);
         await this.scanServices(targetDevice);
-        notifyListeners();
+        // notifyListeners();
 
         await this.logTime();
+        connectingStateSubject.add(false);
         
         this.setTimer();
       }
@@ -180,6 +185,7 @@ mixin BleMixin on ChangeNotifier {
       
       await this.logTime(disconnect: true);
 
+      this.clearChairState();
       this.disconnect();
     });
   }
@@ -190,6 +196,14 @@ mixin BleMixin on ChangeNotifier {
     return;
   }
 
+
+  void clearChairState() {
+    print('clear chair state');
+    this.scanStateSubject.add(false);
+    this.connectingStateSubject.add(false);
+    this._chairState = null;
+    this.targetChar = null;
+  }
 
   Future disconnect() async {
     print('disconnect');

@@ -41,12 +41,12 @@ class Toast {
             maxWidth: 200,
           ),
           child: Material(
-            color: Colors.white.withOpacity(0),
+            color: Colors.transparent,
             child: Container(
               child: Container(
                 child: child,
                 decoration: BoxDecoration(
-                  color: Colors.black54,
+                  color: Colors.white12,
                   borderRadius: BorderRadius.all(
                     Radius.circular(5),
                   ),
