@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:safe_chair2/model/Chair.dart';
-// import 'package:safe_chair2/util/service.dart' as service;
+import 'package:safe_chair2/util/service.dart' as service;
 
 class ChairManageInfo with ChangeNotifier {
   ChairManageInfo() {
@@ -33,4 +33,17 @@ class ChairManageInfo with ChangeNotifier {
     return;
   }
   
+  Future<Map> getChairInfoByMac({String token, String mac}) async {
+    print('get chair info by mac');
+    
+    final res = await service.request(
+      '/device/get_info_by_mac',
+      data: {
+        'token': token,
+        'mac': mac,
+      },
+    );
+    print('r: $res');
+    return res;
+  }
 }

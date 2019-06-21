@@ -41,10 +41,10 @@ class ChairInstructionInfo with ChangeNotifier {
     if (chair == null) return;
     
     final res = await service.request(
-      '/device/get_info_by_uuid',
+      '/device/get_info_by_mac',
       data: {
         'token': token,
-        'uuid': chair.mac,
+        'mac': chair.mac,
       },
     );
     print('r: $res');
