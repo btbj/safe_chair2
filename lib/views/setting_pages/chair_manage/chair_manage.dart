@@ -7,6 +7,7 @@ import 'package:safe_chair2/l10n/app_localizations.dart';
 import 'package:safe_chair2/model/l10nType.dart';
 import './components/chair_list.dart';
 import './components/scan_btn.dart';
+import './components/editing_btn.dart';
 
 class ChairManagePage extends StatelessWidget {
   @override
@@ -22,6 +23,9 @@ class ChairManagePage extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+          actions: <Widget>[
+            EditingBtn(),
+          ],
         ),
         body: ListView(
           children: <Widget>[

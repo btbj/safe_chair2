@@ -4,11 +4,15 @@ import 'package:safe_chair2/model/User.dart';
 import 'package:package_info/package_info.dart';
 import 'package:intl/intl.dart';
 // import 'package:safe_chair2/util/service.dart' as service;
+import 'package:rxdart/rxdart.dart';
 
 class AppInfo with ChangeNotifier {
   AppInfo() {
     this.getVersionInfo();
   }
+
+  PublishSubject popsubject = PublishSubject();
+
   String _versionName;
   String get versionName => _versionName;
 
@@ -66,5 +70,11 @@ class AppInfo with ChangeNotifier {
   void getVersionInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _versionName = packageInfo.version;
+  }
+
+  @override
+  void dispose() {
+    popsubject.close();
+    super.dispose();
   }
 }

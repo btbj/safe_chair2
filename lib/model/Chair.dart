@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -6,6 +8,7 @@ class Chair {
   static final String listKey = 'ChairList';
   static final String currentKey = 'CurrentChair';
 
+  final String uuid;
   final String mac;
   final String name;
   final String model;
@@ -13,11 +16,12 @@ class Chair {
   final String enModel;
 
   Chair({
-    this.mac,
-    this.name,
-    this.model,
-    this.enName,
-    this.enModel,
+    @required this.uuid,
+    @required this.mac,
+    @required this.name,
+    @required this.model,
+    @required this.enName,
+    @required this.enModel,
   });
 
   static bool checkEnglish() {
@@ -45,8 +49,13 @@ class Chair {
     }
   }
 
+  DeviceIdentifier get id {
+    return DeviceIdentifier(this.uuid);
+  }
+
   static String stringfy(Chair chair) {
     final Map<String, String> map = {
+      'uuid': chair.uuid,
       'mac': chair.mac,
       'name': chair.name,
       'model': chair.model,
@@ -59,6 +68,7 @@ class Chair {
   static Chair parse(Map json) {
     try {
       return Chair(
+        uuid: json['uuid'],
         mac: json['mac'],
         name: json['name'],
         model: json['model'],
@@ -83,6 +93,7 @@ class Chair {
     if (savedChair.containsKey(chair.mac)) return;
 
     savedChair[chair.mac] = {
+      'uuid': chair.uuid,
       'mac': chair.mac,
       'name': chair.name,
       'model': chair.model,

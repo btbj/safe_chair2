@@ -23,6 +23,7 @@ class ScanBtn extends StatelessWidget {
     Toast.show(context, msg: res['message']);
     if (res['success']) {
       chairManageInfo.addChair(Chair(
+        uuid: connectedDevice.id.toString(),
         mac: connectedDevice.name.toString(),
         name: res['data']['product']['name'],
         model: res['data']['product']['model'],

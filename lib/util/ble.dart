@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:safe_chair2/util/notification_manager.dart';
 import 'package:safe_chair2/model/ChairState.dart';
+import 'package:safe_chair2/model/Chair.dart';
 // import 'package:safe_chair2/util/StoreManager.dart';
 import 'package:rxdart/subjects.dart';
 // import 'package:safe_chair2/util/LogManager.dart';
@@ -22,6 +23,7 @@ mixin BleMixin on ChangeNotifier {
   StreamSubscription _scanSubscription;
   StreamSubscription get scanSubscription => _scanSubscription;
   final scanStateSubject = BehaviorSubject<bool>.seeded(false);
+  final scanConnectStateSubject = BehaviorSubject<bool>.seeded(false);
   // bool _scanning = false;
   // bool get scanning => _scanning;
   Map<DeviceIdentifier, ScanResult> _scanResults = Map();
@@ -150,7 +152,8 @@ mixin BleMixin on ChangeNotifier {
 
         await this.logTime();
         connectingStateSubject.add(false);
-        
+        scanConnectStateSubject.add(false);
+
         this.setTimer();
       }
       if (s == BluetoothDeviceState.disconnected) {
@@ -179,10 +182,12 @@ mixin BleMixin on ChangeNotifier {
 
   void setTimer() async {
     await this.stopTimer();
-    await this.notificationManager.schedule(id: 111, message: '断开连接', duration: Duration(seconds: 120));
+    await this
+        .notificationManager
+        .schedule(id: 111, message: '断开连接', duration: Duration(seconds: 120));
     this._alertTimer = Timer(Duration(seconds: 120), () async {
       // this.notificationManager.show('断开连接');
-      
+
       await this.logTime(disconnect: true);
 
       this.clearChairState();
@@ -195,7 +200,6 @@ mixin BleMixin on ChangeNotifier {
     this._alertTimer?.cancel();
     return;
   }
-
 
   void clearChairState() {
     print('clear chair state');
@@ -252,23 +256,34 @@ mixin BleMixin on ChangeNotifier {
     return;
   }
 
-  void scanToConnect(BluetoothDevice targetDevice) async {
-    await stopScan();
+  void scanToConnect(Chair chair) async {
+    this.scanConnectStateSubject.add(true);
+    // await stopScan();
     await this.disconnect();
     print('start scan');
     this._scanResults.clear();
     this.scanStateSubject.add(true);
     // this._scanning = true;
     _scanSubscription =
-        _flutterBlue.scan(timeout: Duration(seconds: 60)).listen((scanResult) {
-      if (scanResult.device.id == targetDevice.id &&
-          scanResult.advertisementData.connectable) {
-        connect(scanResult.device);
-        this.scanStateSubject.add(false);
-        // this._scanning = false;
-      }
-      notifyListeners();
-    }, onDone: stopScan);
-    notifyListeners();
+        _flutterBlue.scan(timeout: Duration(seconds: 60)).listen(
+      (scanResult) {
+        if (scanResult.device.id == chair.id &&
+            scanResult.advertisementData.connectable) {
+          connect(scanResult.device);
+          // this.scanStateSubject.add(false);
+          // this._scanning = false;
+        }
+        // notifyListeners();
+      },
+      onDone: () {
+        if (this.scanConnectStateSubject.value) {
+          scanConnectStateSubject.add(false);
+        }
+        if (this.scanStateSubject.value) {
+          this.stopScan();
+        }
+      },
+    );
+    // notifyListeners();
   }
 }

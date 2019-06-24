@@ -9,6 +9,12 @@ class ChairManageInfo with ChangeNotifier {
   }
   List<Chair> _chairList = [];
   List<Chair> get chairList => _chairList;
+  bool _editing = false;
+  bool get editing => _editing;
+  set editing(bool value) {
+    this._editing = value;
+    notifyListeners();
+  }
 
   Future initChairList() async {
     final map = await Chair.getChairMap();

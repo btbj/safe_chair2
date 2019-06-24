@@ -19,3 +19,11 @@ class ChairState {
   bool get pad => (stateInt >> 1) % 2 == 1;
   bool get buckle => stateInt % 2 == 1;
 }
+
+enum AlertType {
+  babayInCarWhenLeaving,
+  installErr,
+  lowBattery,
+  highTemp,
+  lowTemp,
+}

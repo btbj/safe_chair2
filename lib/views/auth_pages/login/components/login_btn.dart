@@ -31,7 +31,8 @@ class LoginBtn extends StatelessWidget {
               username: loginInfo.username,
             );
             User.saveUser(user);
-            Provider.of<AppInfo>(context).user = user;
+            AppInfo appInfo = Provider.of<AppInfo>(context);
+            appInfo.user = user;
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
