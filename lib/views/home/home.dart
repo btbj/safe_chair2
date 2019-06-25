@@ -6,19 +6,25 @@ import 'package:safe_chair2/ui_components/toast.dart';
 import 'components/welldon_tab_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/chair_control_info.dart';
+import 'package:safe_chair2/providers/app_info.dart';
 import 'package:safe_chair2/ui_components/alert_view.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
-    return HomeRoot(chairControlInfo);
+    AppInfo appInfo = Provider.of<AppInfo>(context);
+    return HomeRoot(
+      appInfo: appInfo,
+      chairControlInfo: chairControlInfo,
+    );
   }
 }
 
 class HomeRoot extends StatefulWidget {
   final ChairControlInfo chairControlInfo;
-  HomeRoot(this.chairControlInfo);
+  final AppInfo appInfo;
+  HomeRoot({@required this.appInfo, @required this.chairControlInfo});
 
   @override
   _HomeRootState createState() => _HomeRootState();
@@ -29,6 +35,7 @@ class _HomeRootState extends State<HomeRoot> {
 
   @override
   void initState() {
+    this.widget.appInfo.initLang();
     this.widget.chairControlInfo.alertSubject.listen((alertType) {
       Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
       this._changeTabPage(0);

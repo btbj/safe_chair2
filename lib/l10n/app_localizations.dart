@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show SynchronousFuture;
 // import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:safe_chair2/model/l10nType.dart';
 import './message/messages_all.dart';
@@ -155,4 +157,123 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool shouldReload(AppLocalizationsDelegate old) => false;
+}
+
+// 苹果系统长按多语言补丁
+
+class CupertinoLocalizationsDelegate extends LocalizationsDelegate<CupertinoLocalizations> {
+  const CupertinoLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => ['en', 'zh'].contains(locale.languageCode);
+
+  @override
+  Future<CupertinoLocalizations> load(Locale locale) {
+    return SynchronousFuture<_DefaultCupertinoLocalizations>(
+      _DefaultCupertinoLocalizations(locale.languageCode)
+    );
+  }
+
+  @override
+  bool shouldReload(CupertinoLocalizationsDelegate old) => false;
+
+  static CupertinoLocalizationsDelegate delegate = const CupertinoLocalizationsDelegate();
+}
+
+class _DefaultCupertinoLocalizations extends CupertinoLocalizations {
+  final _en = DefaultCupertinoLocalizations();
+  final String _languageCode;
+
+  static Map<String, Map<String, String>> _dict = {
+    'en': {
+      'alert': 'Alert',
+      'copy': 'Copy',
+      'paste': 'Paste',
+      'cut': 'Cut',
+      'selectAll': 'Select all'
+    },
+    'zh': {
+      'alert': '提示',
+      'copy': '复制',
+      'paste': '粘贴',
+      'cut': '剪切',
+      'selectAll': '全选'
+    }
+  };
+
+  _DefaultCupertinoLocalizations(this._languageCode):
+    assert(_languageCode != null);
+
+  @override
+  String get alertDialogLabel => _get('alert');
+
+  @override
+  String get anteMeridiemAbbreviation => _en.anteMeridiemAbbreviation;
+
+  @override
+  String get postMeridiemAbbreviation => _en.postMeridiemAbbreviation;
+
+  @override
+  String get copyButtonLabel => _get('copy');
+
+  @override
+  String get cutButtonLabel => _get('cut');
+
+  @override
+  String get pasteButtonLabel => _get('paste');
+
+  @override
+  String get selectAllButtonLabel => _get('selectAll');
+
+  @override
+  DatePickerDateOrder get datePickerDateOrder => _en.datePickerDateOrder;
+
+  @override
+  DatePickerDateTimeOrder get datePickerDateTimeOrder => _en.datePickerDateTimeOrder;
+
+  @override
+  String datePickerDayOfMonth(int dayIndex) => _en.datePickerDayOfMonth(dayIndex);
+
+  @override
+  String datePickerHour(int hour) => _en.datePickerHour(hour);
+
+  @override
+  String datePickerHourSemanticsLabel(int hour) => _en.datePickerHourSemanticsLabel(hour);
+
+  @override
+  String datePickerMediumDate(DateTime date) => _en.datePickerMediumDate(date);
+
+  @override
+  String datePickerMinute(int minute) => _en.datePickerMinute(minute);
+
+  @override
+  String datePickerMinuteSemanticsLabel(int minute) => _en.datePickerMinuteSemanticsLabel(minute);
+
+  @override
+  String datePickerMonth(int monthIndex) => _en.datePickerMonth(monthIndex);
+
+  @override
+  String datePickerYear(int yearIndex) => _en.datePickerYear(yearIndex);
+
+  @override
+  String timerPickerHour(int hour) => _en.timerPickerHour(hour);
+
+  @override
+  String timerPickerHourLabel(int hour) => _en.timerPickerHourLabel(hour);
+
+  @override
+  String timerPickerMinute(int minute) => _en.timerPickerMinute(minute);
+
+  @override
+  String timerPickerMinuteLabel(int minute) => _en.timerPickerMinuteLabel(minute);
+
+  @override
+  String timerPickerSecond(int second) => _en.timerPickerSecond(second);
+
+  @override
+  String timerPickerSecondLabel(int second) => _en.timerPickerSecondLabel(second);
+
+  String _get(String key) {
+    return _dict[_languageCode][key];
+  }
 }

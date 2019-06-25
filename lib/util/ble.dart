@@ -20,10 +20,11 @@ mixin BleMixin on ChangeNotifier {
   ChairState get chairState => _chairState;
   bool get connected => _chairState != null;
 
-  TemperatureMonitor _temperatureMonitor = TemperatureMonitor();
+  TemperatureMonitor _temperatureMonitor;
   TemperatureMonitor get temperatureMonitor => _temperatureMonitor;
   set temperatureMonitor(TemperatureMonitor value) {
     this._temperatureMonitor = value;
+    TemperatureMonitor.saveMonitor(value);
     notifyListeners();
   }
 
@@ -81,6 +82,7 @@ mixin BleMixin on ChangeNotifier {
   Future initBle() async {
     // await this.notificationManager.init();
     // await this._logManager.init();
+    this._temperatureMonitor = await TemperatureMonitor.getMonitor();
     await _flutterBlue.setUniqueId('welldon_safe_chair');
 
     _stateSubscription = _flutterBlue.onStateChanged().listen((s) async {

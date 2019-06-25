@@ -54,6 +54,7 @@ class MyAppRoot extends StatelessWidget {
           locale: info.locale,
           localizationsDelegates: [
             AppLocalizationsDelegate(),
+            CupertinoLocalizationsDelegate.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],

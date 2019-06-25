@@ -5,3 +5,6 @@
   Created by 斌杰 胡 on 2019/6/25.
   Copyright © 2019 The Chromium Authors. All rights reserved.
 */
+{
+    CFBundleDisplayName = "Welldon";
+}

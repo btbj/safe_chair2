@@ -5,6 +5,7 @@ import 'package:package_info/package_info.dart';
 import 'package:intl/intl.dart';
 // import 'package:safe_chair2/util/service.dart' as service;
 import 'package:rxdart/rxdart.dart';
+import 'package:safe_chair2/model/Lang.dart';
 
 class AppInfo with ChangeNotifier {
   AppInfo() {
@@ -27,6 +28,7 @@ class AppInfo with ChangeNotifier {
   Locale get locale => _locale;
   set locale(Locale value) {
     this._locale = value;
+    Lang.saveLang(value);
     notifyListeners();
   }
   bool get isEN {
@@ -70,6 +72,11 @@ class AppInfo with ChangeNotifier {
   void getVersionInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _versionName = packageInfo.version;
+  }
+
+  void initLang() async {
+    this._locale = await Lang.getLang();
+    notifyListeners();
   }
 
   @override
