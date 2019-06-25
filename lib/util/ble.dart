@@ -1,21 +1,31 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:safe_chair2/util/notification_manager.dart';
+// import 'package:safe_chair2/util/notification_manager.dart';
 import 'package:safe_chair2/model/ChairState.dart';
 import 'package:safe_chair2/model/Chair.dart';
 // import 'package:safe_chair2/util/StoreManager.dart';
 import 'package:rxdart/subjects.dart';
 // import 'package:safe_chair2/util/LogManager.dart';
+import 'package:safe_chair2/model/TemperatureMonitor.dart';
 
 mixin BleMixin on ChangeNotifier {
   FlutterBlue _flutterBlue = FlutterBlue.instance;
   FlutterBlue get flutterBlue => _flutterBlue;
 
-  NotificationManager notificationManager = NotificationManager();
+  // NotificationManager notificationManager = NotificationManager();
+  BehaviorSubject<AlertType> alertSubject = BehaviorSubject();
+
   ChairState _chairState;
   ChairState get chairState => _chairState;
   bool get connected => _chairState != null;
+
+  TemperatureMonitor _temperatureMonitor = TemperatureMonitor();
+  TemperatureMonitor get temperatureMonitor => _temperatureMonitor;
+  set temperatureMonitor(TemperatureMonitor value) {
+    this._temperatureMonitor = value;
+    notifyListeners();
+  }
 
   final String targetUUIDString = '0000ffe1-0000-1000-8000-00805f9b34fb';
   BluetoothCharacteristic targetChar;
@@ -54,7 +64,11 @@ mixin BleMixin on ChangeNotifier {
   DateTime _disconnectedTime;
   String get disconnectedTime =>
       _disconnectedTime == null ? '--' : _disconnectedTime.toString();
-  Timer _alertTimer;
+  Timer _leaveAlertTimer;
+  Timer _errorTimer;
+  bool _hasPushedInstallError = false;
+  bool _hasPushedTempError = false;
+  bool _hasPushedBatteryError = false;
 
   // LogManager _logManager = LogManager();
 
@@ -65,7 +79,7 @@ mixin BleMixin on ChangeNotifier {
   }
 
   Future initBle() async {
-    await this.notificationManager.init();
+    // await this.notificationManager.init();
     // await this._logManager.init();
     await _flutterBlue.setUniqueId('welldon_safe_chair');
 
@@ -76,7 +90,7 @@ mixin BleMixin on ChangeNotifier {
         await this.disconnect();
         print('close ble');
         this.stateSubject.add(s);
-        notificationManager.show('蓝牙已关闭');
+        // notificationManager.show('蓝牙已关闭');
       }
       notifyListeners();
     });
@@ -101,6 +115,7 @@ mixin BleMixin on ChangeNotifier {
     _deviceConnection = null;
     connectingStateSubject.close();
     deviceStateSubject.close();
+    alertSubject.close();
   }
 
   void startScan() async {
@@ -154,7 +169,7 @@ mixin BleMixin on ChangeNotifier {
         connectingStateSubject.add(false);
         scanConnectStateSubject.add(false);
 
-        this.setTimer();
+        this.setLeaveTimer();
       }
       if (s == BluetoothDeviceState.disconnected) {
         // notificationManager.show('断开连接');
@@ -177,27 +192,6 @@ mixin BleMixin on ChangeNotifier {
       // await this._logManager.append('D:$millseconds');
       this._disconnectedTime = now;
     }
-    return;
-  }
-
-  void setTimer() async {
-    await this.stopTimer();
-    await this
-        .notificationManager
-        .schedule(id: 111, message: '断开连接', duration: Duration(seconds: 120));
-    this._alertTimer = Timer(Duration(seconds: 120), () async {
-      // this.notificationManager.show('断开连接');
-
-      await this.logTime(disconnect: true);
-
-      this.clearChairState();
-      this.disconnect();
-    });
-  }
-
-  Future stopTimer() async {
-    await this.notificationManager.cancel(id: 111);
-    this._alertTimer?.cancel();
     return;
   }
 
@@ -245,6 +239,7 @@ mixin BleMixin on ChangeNotifier {
 
             // targetDevice.writeCharacteristic(char, [0xbb, 0x01]);
             notifyListeners();
+            checkChairState();
           });
           // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
           // await Future.delayed(Duration(seconds: 3));
@@ -285,5 +280,68 @@ mixin BleMixin on ChangeNotifier {
       },
     );
     // notifyListeners();
+  }
+
+  void showAlertDialog(AlertType alertType) {
+    if (this._device == null) return;
+    this.alertSubject.add(alertType);
+  }
+
+  void setLeaveTimer() async {
+    await this.stopLeaveTimer();
+    // await this
+    //     .notificationManager
+    //     .schedule(id: 111, message: '断开连接', duration: Duration(seconds: 120));
+    this._leaveAlertTimer = Timer(Duration(seconds: 120), () async {
+      // this.notificationManager.show('断开连接');
+      this.showAlertDialog(AlertType.babayInCarWhenLeaving);
+
+      await this.logTime(disconnect: true);
+
+      this.clearChairState();
+      this.disconnect();
+    });
+  }
+
+  Future stopLeaveTimer() async {
+    // await this.notificationManager.cancel(id: 111);
+    this._leaveAlertTimer?.cancel();
+    return;
+  }
+
+  void checkChairState() {
+
+    if (!this.chairState.allClear && !this._hasPushedInstallError) {
+      this._errorTimer = Timer(Duration(seconds: 10), () {
+        this._hasPushedBatteryError = true;
+        this.showAlertDialog(AlertType.installErr);
+      });
+    } else if (this.chairState.allClear) {
+      this._hasPushedInstallError = false;
+      this._errorTimer?.cancel();
+    }
+
+    if (this.chairState.battery < 10 && !this._hasPushedBatteryError) {
+      this._hasPushedBatteryError = true;
+      this.showAlertDialog(AlertType.lowBattery);
+    }
+
+    if (this.temperatureMonitor != null) {
+      if (this.temperatureMonitor.highOn &&
+          this.temperatureMonitor.highLimit < this.chairState.temperature &&
+          !this._hasPushedTempError) {
+        this.showAlertDialog(AlertType.highTemp);
+      } // 高温警报
+      if (this.temperatureMonitor.lowOn &&
+          this.temperatureMonitor.lowLimit > this.chairState.temperature &&
+          !this._hasPushedTempError) {
+        this.showAlertDialog(AlertType.highTemp);
+      } // 低温警报
+      if (this.temperatureMonitor.lowLimit < this.chairState.temperature &&
+          this.temperatureMonitor.highLimit > this.chairState.temperature &&
+          this._hasPushedTempError) {
+        this._hasPushedTempError = false;
+      } // 温度警报重置
+    }
   }
 }

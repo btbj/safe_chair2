@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 // import 'package:safe_chair2/model/ChairState.dart';
-import 'package:safe_chair2/model/TemperatureMonitor.dart';
 import 'package:safe_chair2/model/Chair.dart';
 // import 'package:safe_chair2/util/service.dart' as service;
 import 'package:safe_chair2/util/ble.dart';
@@ -9,7 +8,6 @@ import 'package:safe_chair2/util/ble.dart';
 class ChairControlInfo with ChangeNotifier, BleMixin{
   ChairControlInfo() {
     this.initBle();
-    _temperatureMonitor = TemperatureMonitor();
   }
   // ChairState _chairState;
   // ChairState get chairState => _chairState;
@@ -32,11 +30,6 @@ class ChairControlInfo with ChangeNotifier, BleMixin{
     notifyListeners();
   }
 
-  TemperatureMonitor _temperatureMonitor;
-  TemperatureMonitor get temperatureMonitor => _temperatureMonitor;
-  set temperatureMonitor(TemperatureMonitor value) {
-    this._temperatureMonitor = value;
-    notifyListeners();
-  }
+  
 
 }

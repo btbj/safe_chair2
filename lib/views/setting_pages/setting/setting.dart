@@ -9,7 +9,8 @@ import './components/language_setting_btn.dart';
 import './components/logout_btn.dart';
 import './components/version_box.dart';
 import 'package:provider/provider.dart';
-import 'package:safe_chair2/providers/app_info.dart';
+import 'package:safe_chair2/providers/chair_control_info.dart';
+import 'package:safe_chair2/model/ChairState.dart';
 
 class SettingPage extends StatelessWidget {
   Widget _buildDivider() {
@@ -56,9 +57,8 @@ class SettingPage extends StatelessWidget {
         child: Text('test'),
         onPressed: () {
           print('test');
-          // AppInfo appInfo = Provider.of<AppInfo>(context);
-          // appInfo.popsubject.add(true);
-          // appInfo.popToHome();
+          ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
+          chairControlInfo.alertSubject.add(AlertType.lowBattery);
         },
       ),
     );

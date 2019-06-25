@@ -4,14 +4,38 @@ import 'package:safe_chair2/views/help_page/help_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:safe_chair2/ui_components/toast.dart';
 import 'components/welldon_tab_bar.dart';
+import 'package:provider/provider.dart';
+import 'package:safe_chair2/providers/chair_control_info.dart';
+import 'package:safe_chair2/ui_components/alert_view.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
+    return HomeRoot(chairControlInfo);
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+class HomeRoot extends StatefulWidget {
+  final ChairControlInfo chairControlInfo;
+  HomeRoot(this.chairControlInfo);
+
+  @override
+  _HomeRootState createState() => _HomeRootState();
+}
+
+class _HomeRootState extends State<HomeRoot> {
   int _tabIndex = 0;
+
+  @override
+  void initState() {
+    this.widget.chairControlInfo.alertSubject.listen((alertType) {
+      Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
+      this._changeTabPage(0);
+      AlertView.show(context, alertType);
+    });
+    super.initState();
+  }
 
   void openUrl(String url) async {
     if (await canLaunch(url)) {
