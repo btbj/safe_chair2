@@ -71,7 +71,7 @@ class _HomeRootState extends State<HomeRoot> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.black,
       body: IndexedStack(
         index: _tabIndex,
         children: <Widget>[

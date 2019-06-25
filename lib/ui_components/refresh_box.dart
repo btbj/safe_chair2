@@ -24,7 +24,7 @@
 //         refreshingText: '获取中...',
 //         refreshedText: '已刷新',
 //         bgColor: Colors.transparent,
-//         textColor: Colors.black87,
+//         textColor: Colors.black,
 //       ),
 //       refreshFooter: ClassicsFooter(
 //         key: footerKey,
@@ -34,7 +34,7 @@
 //         loadedText: '已加载',
 //         noMoreText: '没有更多',
 //         bgColor: Colors.transparent,
-//         textColor: Colors.black87,
+//         textColor: Colors.black,
 //       ),
 //       child: child,
 //       onRefresh: onRefresh,

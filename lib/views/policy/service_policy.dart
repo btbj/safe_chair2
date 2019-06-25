@@ -7,9 +7,9 @@ class ServicePolicyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         iconTheme: IconThemeData(color: primaryColor),
         title: Text(
           AppLocalizations.of(context).uiText(UiType.policy_title),

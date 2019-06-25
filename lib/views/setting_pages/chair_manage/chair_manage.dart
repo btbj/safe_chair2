@@ -15,9 +15,9 @@ class ChairManagePage extends StatelessWidget {
     return ChangeNotifierProvider(
       builder: (context) => ChairManageInfo(),
       child: Scaffold(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: Colors.black,
           title: Text(
             AppLocalizations.of(context).uiText(UiType.chair_manage_title),
             style: TextStyle(color: Theme.of(context).primaryColor),

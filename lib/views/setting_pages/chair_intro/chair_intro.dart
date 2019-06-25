@@ -18,9 +18,9 @@ class ChairIntroPage extends StatelessWidget {
     return ChangeNotifierProvider(
       builder: (context) => ChairInstructionInfo(token: _appInfo.user.token, chair: chair),
       child: Scaffold(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: Colors.black,
           title: Text(
             AppLocalizations.of(context).uiText(UiType.chair_intro_title),
             style: TextStyle(color: Theme.of(context).primaryColor),

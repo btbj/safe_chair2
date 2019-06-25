@@ -10,9 +10,10 @@ import 'package:safe_chair2/model/Lang.dart';
 class AppInfo with ChangeNotifier {
   AppInfo() {
     this.getVersionInfo();
+    this.startSplashTimer();
   }
 
-  PublishSubject popsubject = PublishSubject();
+  PublishSubject<bool> splashSubject = PublishSubject();
 
   String _versionName;
   String get versionName => _versionName;
@@ -74,14 +75,25 @@ class AppInfo with ChangeNotifier {
     _versionName = packageInfo.version;
   }
 
-  void initLang() async {
+  Future initLang() async {
     this._locale = await Lang.getLang();
     notifyListeners();
+    return;
+  }
+
+  void startSplashTimer() async {
+    print('start splash timer');
+    Future delayTimer = Future.delayed(Duration(seconds: 3));
+
+    Future.wait([this.autoLogin(), delayTimer, this.initLang()]).then((values) {
+      final bool autoLoginSuccess = values[0];
+      splashSubject.add(autoLoginSuccess);
+    });
   }
 
   @override
   void dispose() {
-    popsubject.close();
+    splashSubject.close();
     super.dispose();
   }
 }

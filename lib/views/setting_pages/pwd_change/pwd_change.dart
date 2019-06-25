@@ -15,9 +15,9 @@ class PwdChangePage extends StatelessWidget {
     return ChangeNotifierProvider<PwdchangeInfo>(
       builder: (context) => PwdchangeInfo(appInfo.user.username),
       child: Scaffold(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: Colors.black,
           title: Text(
             AppLocalizations.of(context).uiText(UiType.password_setting_title),
             style: TextStyle(color: Theme.of(context).primaryColor),

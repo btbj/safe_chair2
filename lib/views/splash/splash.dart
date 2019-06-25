@@ -1,35 +1,30 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:safe_chair2/ui_components/FadeRoute.dart';
 import 'package:safe_chair2/views/home/home.dart';
 import 'package:safe_chair2/views/auth_pages/login/login.dart';
-import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/app_info.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
+  final AppInfo appInfo;
+  SplashPage(this.appInfo);
 
-  void startTimer(BuildContext context) async {
-    print('start timer');
-    // await Future.delayed(Duration(seconds: 3));
+  @override
+  _SplashPageState createState() => _SplashPageState();
+}
 
-    // Navigator.of(context).pushAndRemoveUntil(
-    //   FadeRoute(
-    //     builder: (context) => HomePage(),
-    //     settings: RouteSettings(isInitialRoute: true),
-    //   ),
-    //   (_) => false,
-    // );
-
-    Future delayTimer = Future.delayed(Duration(seconds: 3));
-    AppInfo mainInfo = Provider.of<AppInfo>(context);
-
-    Future.wait([mainInfo.autoLogin(), delayTimer]).then((values) {
-      final bool autoLoginSuccess = values[0];
-      navToNextPage(context, autoLoginSuccess);
+class _SplashPageState extends State<SplashPage> {
+  StreamSubscription timerSub;
+  @override
+  void initState() {
+    this.timerSub = this.widget.appInfo.splashSubject.listen((success) {
+      timerSub.cancel();
+      this.navToNextPage(success);
     });
+    super.initState();
   }
-
-  void navToNextPage(BuildContext context, bool success) {
+  void navToNextPage(bool success) {
     Widget targetPage = success ? HomePage() : LoginPage();
 
     Navigator.of(context).pushAndRemoveUntil(
@@ -43,9 +38,8 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    startTimer(context);
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.black,
       body: Container(
         child: Center(
           child: Column(
@@ -62,5 +56,11 @@ class SplashPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    this.timerSub?.cancel();
+    super.dispose();
   }
 }

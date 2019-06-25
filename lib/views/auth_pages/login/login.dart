@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
-          backgroundColor: Colors.black87,
+          backgroundColor: Colors.black,
           body: ListView(
             children: <Widget>[
               Container(

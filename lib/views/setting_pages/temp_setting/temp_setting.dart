@@ -16,9 +16,9 @@ class TempSettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         title: Text(
           AppLocalizations.of(context).uiText(UiType.temperature_setting_title),
           style: TextStyle(color: Theme.of(context).primaryColor),

@@ -51,9 +51,9 @@ class LanguageSettingPage extends StatelessWidget {
     bool isEN = checkEnglish();
 
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         title: Text(
           AppLocalizations.of(context).uiText(UiType.language_setting_title),
           style: TextStyle(color: Theme.of(context).primaryColor),

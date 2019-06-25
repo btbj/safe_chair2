@@ -50,7 +50,7 @@ class MyAppRoot extends StatelessWidget {
           theme: ThemeData(
             primaryColor: Color.fromARGB(255, 217, 132, 44),
           ),
-          home: SplashPage(),
+          home: SplashPage(info),
           locale: info.locale,
           localizationsDelegates: [
             AppLocalizationsDelegate(),

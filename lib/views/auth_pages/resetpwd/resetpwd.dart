@@ -15,9 +15,9 @@ class ResetpwdPage extends StatelessWidget {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         child: Scaffold(
-          backgroundColor: Colors.black87,
+          backgroundColor: Colors.black,
           appBar: AppBar(
-            backgroundColor: Colors.black87,
+            backgroundColor: Colors.black,
             iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
           ),
           body: ListView(
