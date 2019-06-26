@@ -55,6 +55,16 @@ enum UiType {
   // 警报弹层
   alert_title,
   alert_confirm_btn_text,
+  // 设备管理
+  connect_btn,
+  disconnect_btn,
+  edit_btn,
+  finish_btn,
+  confirm_btn,
+  cancel_btn,
+  edit_device_name_title,
+  delete_device_dialog_title,
+  delete_device_dialog_message,
 }
 
 enum MessageType {

@@ -6,6 +6,8 @@ import 'package:safe_chair2/providers/chair_control_info.dart';
 import 'package:safe_chair2/model/Chair.dart';
 import 'package:safe_chair2/ui_components/indicator.dart';
 // import 'package:safe_chair2/ui_components/indicator.dart';
+import 'package:safe_chair2/l10n/app_localizations.dart';
+import 'package:safe_chair2/model/l10nType.dart';
 
 class ListConnectBtn extends StatefulWidget {
   final Chair chair;
@@ -34,7 +36,9 @@ class _ListConnectBtnState extends State<ListConnectBtn> {
         child: FlatButton(
           padding: EdgeInsets.symmetric(vertical: 0),
           child: Text(
-            connected ? '断开' : '连接',
+            connected
+                ? AppLocalizations.of(context).uiText(UiType.disconnect_btn)
+                : AppLocalizations.of(context).uiText(UiType.connect_btn),
             style: TextStyle(color: primaryColor, fontSize: 12),
           ),
           onPressed: () async {
@@ -45,7 +49,8 @@ class _ListConnectBtnState extends State<ListConnectBtn> {
             } else {
               Indicator.show(context);
               chairControlInfo.scanToConnect(widget.chair);
-              scanConnectSub = chairControlInfo.scanConnectStateSubject.listen((scanning) {
+              scanConnectSub =
+                  chairControlInfo.scanConnectStateSubject.listen((scanning) {
                 print(scanning);
                 if (!scanning) {
                   Indicator.close(context);

@@ -7,8 +7,8 @@ import 'package:safe_chair2/ui_components/basic_dialog.dart';
 import './list_connect_btn.dart';
 import './name_dialog.dart';
 // import 'package:safe_chair2/providers/app_info.dart';
-// import 'package:safe_chair2/l10n/app_localizations.dart';
-// import 'package:safe_chair2/model/l10nType.dart';
+import 'package:safe_chair2/l10n/app_localizations.dart';
+import 'package:safe_chair2/model/l10nType.dart';
 
 class ChairList extends StatelessWidget {
   Widget _buildEditingBox(BuildContext context, Chair chair,
@@ -37,7 +37,11 @@ class ChairList extends StatelessWidget {
           child: Icon(Icons.delete, color: Colors.red),
           onTap: () async {
             print('delete chair');
-            BasicDialog.pop(context, message: '确定删除？', title: '删除')
+            final String title = AppLocalizations.of(context)
+                .uiText(UiType.delete_device_dialog_title);
+            final String message = AppLocalizations.of(context)
+                .uiText(UiType.delete_device_dialog_message);
+            BasicDialog.pop(context, message: message, title: title)
                 .then((confirm) {
               if (confirm == true) {
                 print('confirm');

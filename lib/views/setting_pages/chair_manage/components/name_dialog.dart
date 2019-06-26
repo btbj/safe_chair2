@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:safe_chair2/l10n/app_localizations.dart';
+import 'package:safe_chair2/model/l10nType.dart';
 
 class NameDialog extends StatefulWidget {
   final String currentName;
@@ -20,7 +22,7 @@ class _NameDialogState extends State<NameDialog> {
   Widget build(BuildContext context) {
     return SimpleDialog(
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      title: Text('编辑设备名称'),
+      title: Text(AppLocalizations.of(context).uiText(UiType.edit_device_name_title)),
       children: <Widget>[
         SizedBox(height: 15),
         TextField(
@@ -43,7 +45,7 @@ class _NameDialogState extends State<NameDialog> {
           children: <Widget>[
             FlatButton(
               color: Colors.grey[300],
-              child: Text('取消'),
+              child: Text(AppLocalizations.of(context).uiText(UiType.cancel_btn)),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -51,7 +53,7 @@ class _NameDialogState extends State<NameDialog> {
             SizedBox(width: 15),
             FlatButton(
               color: Theme.of(context).primaryColor,
-              child: Text('确定', style: TextStyle(color: Colors.white)),
+              child: Text(AppLocalizations.of(context).uiText(UiType.confirm_btn), style: TextStyle(color: Colors.white)),
               onPressed: () {
                 Navigator.pop(context, nameCtr.text);
               },

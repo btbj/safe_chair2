@@ -94,6 +94,16 @@ class AppLocalizations {
         // 警报弹层
         UiType.alert_title: 'Alert',
         UiType.alert_confirm_btn_text: 'Confirm',
+        // 设备管理
+        UiType.connect_btn: 'Connect',
+        UiType.disconnect_btn: 'Disconnect',
+        UiType.edit_btn: 'Edit',
+        UiType.finish_btn: 'Finish',
+        UiType.confirm_btn: 'Confirm',
+        UiType.cancel_btn: 'Cancel',
+        UiType.edit_device_name_title: 'Edit Device Name',
+        UiType.delete_device_dialog_title: 'Delete Device',
+        UiType.delete_device_dialog_message: 'Do you want to delete this device?',
       },
       name: 'uiText',
       args: [type],
