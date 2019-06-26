@@ -7,6 +7,7 @@ import 'dart:convert';
 class Chair {
   static final String listKey = 'ChairList';
   static final String currentKey = 'CurrentChair';
+  static final String nameMapKey = 'chairNameMap';
 
   final String uuid;
   final String mac;
@@ -150,5 +151,25 @@ class Chair {
       await prefs.setString(currentKey, chairString);
       return chair;
     }
+  }
+
+  static Future<Map> getNameMap() async {
+    final prefs = await SharedPreferences.getInstance();
+    String savedString = prefs.getString(nameMapKey) ?? '{}';
+    return jsonDecode(savedString);
+  }
+
+  Future saveName(String name) async {
+    final nameMap = await Chair.getNameMap();
+    if (name == null || name.isEmpty) {
+      nameMap.remove(this.uuid);
+    } else {
+      nameMap[this.uuid] = name;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    final newDataString = jsonEncode(nameMap);
+    await prefs.setString(nameMapKey, newDataString);
+    return;
   }
 }

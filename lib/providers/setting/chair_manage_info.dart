@@ -5,6 +5,7 @@ import 'package:safe_chair2/util/service.dart' as service;
 
 class ChairManageInfo with ChangeNotifier {
   ChairManageInfo() {
+    initChairNameMap();
     initChairList();
   }
   List<Chair> _chairList = [];
@@ -16,11 +17,32 @@ class ChairManageInfo with ChangeNotifier {
     notifyListeners();
   }
 
+  Map _chairNameMap = {};
+  Map get chairNameMap => this._chairNameMap;
+
   Future initChairList() async {
     final map = await Chair.getChairMap();
     this._chairList = List<Chair>.generate(map.length, (index) {
       return Chair.parse(map.values.toList()[index]);
     });
+    notifyListeners();
+    return;
+  }
+
+  Future initChairNameMap() async {
+    final map = await Chair.getNameMap();
+    this._chairNameMap = map;
+    notifyListeners();
+    return;
+  }
+
+  void saveName(Chair chair, String name) async {
+    if (name.isEmpty) {
+      this._chairNameMap.remove(chair.uuid);
+    } else {
+      this._chairNameMap[chair.uuid] = name;
+    }
+    await chair.saveName(name);
     notifyListeners();
     return;
   }
@@ -38,10 +60,10 @@ class ChairManageInfo with ChangeNotifier {
     notifyListeners();
     return;
   }
-  
+
   Future<Map> getChairInfoByMac({String token, String mac}) async {
     print('get chair info by mac');
-    
+
     final res = await service.request(
       '/device/get_info_by_mac',
       data: {

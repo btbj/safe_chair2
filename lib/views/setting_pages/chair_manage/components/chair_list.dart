@@ -5,6 +5,7 @@ import 'package:safe_chair2/model/Chair.dart';
 import 'package:safe_chair2/providers/chair_control_info.dart';
 import 'package:safe_chair2/ui_components/basic_dialog.dart';
 import './list_connect_btn.dart';
+import './name_dialog.dart';
 // import 'package:safe_chair2/providers/app_info.dart';
 // import 'package:safe_chair2/l10n/app_localizations.dart';
 // import 'package:safe_chair2/model/l10nType.dart';
@@ -12,21 +13,41 @@ import './list_connect_btn.dart';
 class ChairList extends StatelessWidget {
   Widget _buildEditingBox(BuildContext context, Chair chair,
       ChairManageInfo chairManageInfo, ChairControlInfo chairControlInfo) {
-    return GestureDetector(
-      child: Icon(
-        Icons.delete,
-        color: Colors.red,
-      ),
-      onTap: () async {
-        print('delete chair');
-        BasicDialog.pop(context, message: '确定删除？', title: '删除').then((confirm) {
-          if (confirm == true) {
-            print('confirm');
-            chairManageInfo.deleteChair(chair);
-            chairControlInfo.targetChair = null;
-          }
-        });
-      },
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        GestureDetector(
+          child: Icon(Icons.edit, color: Theme.of(context).primaryColor),
+          onTap: () {
+            print('edit name');
+            final String currentName =
+                chairManageInfo.chairNameMap[chair.uuid] ?? '';
+            showDialog(
+              context: context,
+              builder: (context) => NameDialog(currentName),
+            ).then((value) {
+              if (value != null) {
+                chairManageInfo.saveName(chair, value);
+              }
+            });
+          },
+        ),
+        SizedBox(width: 15),
+        GestureDetector(
+          child: Icon(Icons.delete, color: Colors.red),
+          onTap: () async {
+            print('delete chair');
+            BasicDialog.pop(context, message: '确定删除？', title: '删除')
+                .then((confirm) {
+              if (confirm == true) {
+                print('confirm');
+                chairManageInfo.deleteChair(chair);
+                chairControlInfo.targetChair = null;
+              }
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -37,6 +58,10 @@ class ChairList extends StatelessWidget {
           Provider.of<ChairControlInfo>(context);
       bool selected = chairControlInfo.targetChair != null &&
           chairControlInfo.targetChair.mac == chair.mac;
+      String nameText = chair.nameText;
+      if (chairManageInfo.chairNameMap.containsKey(chair.uuid)) {
+        nameText = chairManageInfo.chairNameMap[chair.uuid];
+      }
       return ListTile(
         leading: GestureDetector(
           child: selected
@@ -61,7 +86,7 @@ class ChairList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text(chair.modelText, style: TextStyle(color: primaryColor)),
-            Text(chair.nameText, style: TextStyle(color: primaryColor)),
+            Text(nameText, style: TextStyle(color: primaryColor)),
           ],
         ),
         trailing: chairManageInfo.editing

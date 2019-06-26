@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:safe_chair2/model/Chair.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/chair_control_info.dart';
@@ -14,6 +14,18 @@ class ScanResultList extends StatefulWidget {
 
 class _ScanResultListState extends State<ScanResultList> {
   StreamSubscription connectingSub;
+  Map nameMap;
+
+  @override
+  void initState() {
+    this.initNameMap();
+    super.initState();
+  }
+
+  void initNameMap() async {
+    this.nameMap = await Chair.getNameMap();
+    setState(() {});
+  }
 
   Widget _buildLoadingBox(ChairControlInfo chairControlInfo) {
     return StreamBuilder<bool>(
@@ -47,12 +59,15 @@ class _ScanResultListState extends State<ScanResultList> {
 
       List<Widget> itemList = List<Widget>.generate(list.length, (index) {
         final item = list[index];
+        String nameText = 'unknown';
+        if (item.device.name.isNotEmpty) nameText = item.device.name;
+        if (nameMap != null && nameMap.containsKey(item.device.id.toString()))
+          nameText = nameMap[item.device.id.toString()];
+
         return ListTile(
           leading: Icon(Icons.devices, color: primaryColor),
           title: Text(
-            item.device.name.toString().isEmpty
-                ? 'unknown'
-                : item.device.name.toString(),
+            nameText,
             style: TextStyle(color: primaryColor),
           ),
           subtitle: Text(
@@ -66,7 +81,8 @@ class _ScanResultListState extends State<ScanResultList> {
           onTap: () {
             Indicator.show(context);
             chairControlInfo.connect(item.device);
-            connectingSub = chairControlInfo.connectingStateSubject.listen((connecting) {
+            connectingSub =
+                chairControlInfo.connectingStateSubject.listen((connecting) {
               if (!connecting) {
                 Indicator.close(context);
                 connectingSub.cancel();
@@ -87,5 +103,11 @@ class _ScanResultListState extends State<ScanResultList> {
         children: itemList,
       );
     });
+  }
+
+  @override
+  void dispose() {
+    this.connectingSub?.cancel();
+    super.dispose();
   }
 }
