@@ -13,8 +13,8 @@ class ChairControlInfo with ChangeNotifier, BleMixin{
   // ChairState get chairState => _chairState;
   // bool get connected => _chairState != null;
 
-  bool hasBleError = false;
-  bool hasNotificationError = false;
+  // bool hasBleError = false;
+  // bool hasNotificationError = false;
 
   // Chair _targetChair = Chair(
   //   mac: 'fda50693-a4e2-4fb1-afcf-c6eb07647826',

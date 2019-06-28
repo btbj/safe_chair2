@@ -9,7 +9,7 @@ class NotificationStateBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChairControlInfo>(builder: (context, chairControlInfo, _) {
-      final bool hasError = chairControlInfo.hasNotificationError;
+      final bool hasError = !chairControlInfo.notificationNoErr;
       final AppInfo appInfo = Provider.of<AppInfo>(context);
       return Container(
         height: 50,

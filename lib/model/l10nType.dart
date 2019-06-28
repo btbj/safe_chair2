@@ -50,7 +50,7 @@ enum UiType {
   beacon_set_text,
   beacon_notset_text,
   beacon_protecting_text,
-  location_state_text,
+  bluetooth_state_text,
   notification_state_text,
   // 警报弹层
   alert_title,

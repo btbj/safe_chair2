@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-// import 'package:safe_chair2/util/notification_manager.dart';
+import 'package:safe_chair2/util/notification_manager.dart';
 import 'package:safe_chair2/model/ChairState.dart';
 import 'package:safe_chair2/model/Chair.dart';
 // import 'package:safe_chair2/util/StoreManager.dart';
@@ -10,10 +10,14 @@ import 'package:rxdart/subjects.dart';
 import 'package:safe_chair2/model/TemperatureMonitor.dart';
 
 mixin BleMixin on ChangeNotifier {
+  bool _notificationNoErr = false;
+  bool get notificationNoErr=> _notificationNoErr;
+  bool get bluetoothIsOn=> this._state == BluetoothState.on;
+
   FlutterBlue _flutterBlue = FlutterBlue.instance;
   FlutterBlue get flutterBlue => _flutterBlue;
 
-  // NotificationManager notificationManager = NotificationManager();
+  NotificationManager notificationManager = NotificationManager();
   BehaviorSubject<AlertType> alertSubject = BehaviorSubject();
 
   ChairState _chairState;
@@ -80,7 +84,7 @@ mixin BleMixin on ChangeNotifier {
   }
 
   Future initBle() async {
-    // await this.notificationManager.init();
+    this._notificationNoErr = await this.notificationManager.init();
     // await this._logManager.init();
     this._temperatureMonitor = await TemperatureMonitor.getMonitor();
     await _flutterBlue.setUniqueId('welldon_safe_chair');

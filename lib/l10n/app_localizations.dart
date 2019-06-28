@@ -89,7 +89,7 @@ class AppLocalizations {
         UiType.beacon_set_text: 'Chair Set',
         UiType.beacon_notset_text: 'No Chair',
         UiType.beacon_protecting_text: 'Protecting',
-        UiType.location_state_text: 'Location',
+        UiType.bluetooth_state_text: 'Bluetooth',
         UiType.notification_state_text: 'Notification',
         // 警报弹层
         UiType.alert_title: 'Alert',
