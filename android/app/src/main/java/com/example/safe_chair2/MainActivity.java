@@ -1,4 +1,4 @@
-package com.example.safe_chair2;
+package net.gooduo.safe_chair2;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

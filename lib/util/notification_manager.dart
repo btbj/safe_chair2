@@ -23,12 +23,14 @@ class NotificationManager {
 
   Future show(BuildContext context, AlertType type) async {
     if (!noErr) return;
+    String soundName = getSoundName(type);
     String message = getMessage(context, type);
     
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'ble chennel id', 'ble message chennel', 'show ble message',
+        playSound: true, sound: soundName,
         importance: Importance.Max, priority: Priority.High);
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = new IOSNotificationDetails(presentSound: true, sound: '$soundName.caf');
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
@@ -81,3 +83,32 @@ class NotificationManager {
     return message;
   }
 }
+
+String getSoundName(AlertType type) {
+    String sound;
+    switch (type) {
+      case AlertType.babayInCarWhenLeaving:
+        sound = 'baby_in_car_alert';
+        break;
+      // case AlertType.enterRegion:
+      //   sound = 'enter_region';
+      //   break;
+      // case AlertType.exitRegion:
+      //   sound = 'exit_region';
+      //   break;
+      case AlertType.installErr:
+        sound = 'install_err';
+        break;
+      case AlertType.lowBattery:
+        sound = 'low_battery';
+        break;
+      case AlertType.highTemp:
+        sound = 'temp_alert';
+        break;
+      case AlertType.lowTemp:
+        sound = 'temp_alert';
+        break;
+      default:
+    }
+    return sound;
+  }
