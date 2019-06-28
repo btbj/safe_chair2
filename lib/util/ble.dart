@@ -147,6 +147,7 @@ mixin BleMixin on ChangeNotifier {
   }
 
   void connect(BluetoothDevice targetDevice) async {
+    connectingStateSubject.add(true);
     await this.stopScan();
     await _deviceStateSubscription?.cancel();
     _deviceStateSubscription = null;
@@ -156,7 +157,6 @@ mixin BleMixin on ChangeNotifier {
     final currentDeviceState = await targetDevice.state;
     this.deviceStateSubject.add(currentDeviceState);
     // notifyListeners();
-    connectingStateSubject.add(true);
 
     _deviceStateSubscription = targetDevice.onStateChanged().listen((s) async {
       this.deviceStateSubject.add(s);
