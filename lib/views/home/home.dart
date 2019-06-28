@@ -82,6 +82,7 @@ class _HomeRootState extends State<HomeRoot> {
         ],
       ),
       bottomNavigationBar: WelldonTabBar(
+        currentIndex: _tabIndex,
         onTap: _changeTabPage,
       ),
     );

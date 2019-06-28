@@ -5,9 +5,15 @@ import 'package:safe_chair2/model/l10nType.dart';
 
 class WelldonTabBar extends StatelessWidget {
   final Function onTap;
-  WelldonTabBar({this.onTap});
+  final int currentIndex;
+  WelldonTabBar({@required this.currentIndex, @required this.onTap});
 
-  Widget _buildBtn({int index, ImageProvider image, Text label}) {
+  Widget _buildBtn({int index, Text label}) {
+    String fileName = '${index+1}a.png';
+    if (this.currentIndex == index) {
+      fileName = '${index+1}b.png';
+    }
+    final String imagePath = 'lib/assets/img/tab_bar/$fileName';
     return Expanded(
       child: GestureDetector(
         onTap: () {
@@ -21,7 +27,7 @@ class WelldonTabBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Image(
-                image: image,
+                image: AssetImage(imagePath),
                 height: 30,
                 width: 30,
               ),
@@ -46,22 +52,18 @@ class WelldonTabBar extends StatelessWidget {
         children: <Widget>[
           _buildBtn(
             index: 0,
-            image: AssetImage('lib/assets/img/tab_bar/baby_care.png'),
             label: Text(AppLocalizations.of(context).uiText(UiType.tabbar_chair), style: textStyle),
           ),
           _buildBtn(
             index: 1,
-            image: AssetImage('lib/assets/img/tab_bar/welldon.png'),
             label: Text(AppLocalizations.of(context).uiText(UiType.tabbar_website), style: textStyle),
           ),
           _buildBtn(
             index: 2,
-            image: AssetImage('lib/assets/img/tab_bar/tmall.png'),
             label: Text(AppLocalizations.of(context).uiText(UiType.tabbar_tmall), style: textStyle),
           ),
           _buildBtn(
             index: 3,
-            image: AssetImage('lib/assets/img/tab_bar/help.png'),
             label: Text(AppLocalizations.of(context).uiText(UiType.tabbar_help), style: textStyle),
           ),
         ],
