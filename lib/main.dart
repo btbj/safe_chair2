@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:safe_chair2/l10n/app_localizations.dart';
+import 'package:safe_chair2/model/l10nType.dart';
 import 'package:safe_chair2/views/splash/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/app_info.dart';
@@ -46,7 +47,7 @@ class MyAppRoot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AppInfo>(builder: (context, info, _) {
       return MaterialApp(
-          onGenerateTitle: (context) => AppLocalizations.of(context).title,
+          onGenerateTitle: (context) => AppLocalizations.of(context).uiText(UiType.app_title),
           theme: ThemeData(
             primaryColor: Color.fromARGB(255, 217, 132, 44),
           ),
