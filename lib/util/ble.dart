@@ -318,8 +318,9 @@ mixin BleMixin on ChangeNotifier {
   void checkChairState() {
 
     if (!this.chairState.allClear && !this._hasPushedInstallError) {
+      this._errorTimer?.cancel();
+      this._hasPushedBatteryError = true;
       this._errorTimer = Timer(Duration(seconds: 10), () {
-        this._hasPushedBatteryError = true;
         this.showAlertDialog(AlertType.installErr);
       });
     } else if (this.chairState.allClear) {
