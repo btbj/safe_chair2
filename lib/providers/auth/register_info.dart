@@ -55,15 +55,16 @@ class RegisterInfo with ChangeNotifier {
   }
 
   Future<Map> register() async {
-    print('register');
-    return null;
+    // print('register');
+    // return null;
 
-    // final res = await service.request('/user/do_login', data: {
-    //   'username': username,
-    //   'password': password,
-    // });
-    // print(res);
-    // return res;
+    final res = await service.request('/user/do_reg', data: {
+      'username': username,
+      'code': code,
+      'password': password,
+    });
+    print(res);
+    return res;
   }
 
   @override

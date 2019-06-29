@@ -39,14 +39,15 @@ class AppInfo with ChangeNotifier {
     return shortLocaleCode != 'zh';
   }
 
-  void logout() {
+  Future logout() async {
     _user = null;
-    User.saveUser(null);
-    notifyListeners();
+    await User.saveUser(null);
+    return;
   }
 
   Future<bool> autoLogin() async {
     final User storedUser = await User.getUser();
+    // print(storedUser);
     
     if(storedUser == null) {
       return false;

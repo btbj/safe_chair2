@@ -13,14 +13,13 @@ class LogoutBtn extends StatelessWidget {
       builder: (context, appInfo, _) {
         return BasicBtn(
           label: AppLocalizations.of(context).uiText(UiType.logout_btn_text),
-          onTap: () {
+          onTap: () async {
+            await appInfo.logout();
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
               (_) => false,
-            ).then((_) {
-              appInfo.logout();
-            });
+            );
           },
         );
       },

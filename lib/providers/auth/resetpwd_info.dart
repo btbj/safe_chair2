@@ -54,15 +54,16 @@ class ResetpwdInfo with ChangeNotifier {
   }
 
   Future<Map> resetpwd() async {
-    print('resetpwd');
-    return null;
+    // print('resetpwd');
+    // return null;
 
-    // final res = await service.request('/user/do_login', data: {
-    //   'username': username,
-    //   'password': password,
-    // });
-    // print(res);
-    // return res;
+    final res = await service.request('/user/do_reset_pwd', data: {
+      'username': username,
+      'password': password,
+      'code': code,
+    });
+    print(res);
+    return res;
   }
 
   @override
