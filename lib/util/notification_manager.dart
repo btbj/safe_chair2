@@ -39,8 +39,19 @@ class NotificationManager {
     return;
   }
 
-  Future schedule({int id, String message, Duration duration}) async {
+  Future schedule(BuildContext context, AlertType type) async {
     if (!noErr) return;
+    int id = 1;
+    String message = getMessage(context, type);
+    Duration duration = Duration(seconds: 1);
+    if (type == AlertType.babayInCarWhenLeaving) {
+      id = 2;
+      duration = Duration(seconds: 120);
+    } else if (type == AlertType.installErr) {
+      id = 3;
+      duration = Duration(seconds: 10);
+    }
+    String title = AppLocalizations.of(context).uiText(UiType.app_title);
     final scheduleTime = new DateTime.now().add(duration);
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'ble channel id2', 'ble schedule chennel name', 'show scheduled ble message',
@@ -49,12 +60,18 @@ class NotificationManager {
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
-        id, 'aaa', message, scheduleTime, platformChannelSpecifics,
+        id, title, message, scheduleTime, platformChannelSpecifics,
         payload: 'item id 2');
     return;
   }
 
-  Future cancel({int id}) async {
+  Future cancel(AlertType type) async {
+    int id = 1;
+    if (type == AlertType.babayInCarWhenLeaving) {
+      id = 2;
+    } else if (type == AlertType.installErr) {
+      id = 3;
+    }
     await flutterLocalNotificationsPlugin.cancel(id);
     return;
   }

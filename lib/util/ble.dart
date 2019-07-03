@@ -69,11 +69,11 @@ mixin BleMixin on ChangeNotifier {
   DateTime _disconnectedTime;
   String get disconnectedTime =>
       _disconnectedTime == null ? '--' : _disconnectedTime.toString();
-  Timer _leaveAlertTimer;
-  Timer _errorTimer;
-  bool _hasPushedInstallError = false;
-  bool _hasPushedTempError = false;
-  bool _hasPushedBatteryError = false;
+  // Timer _leaveAlertTimer;
+  // Timer _errorTimer;
+  // bool _hasPushedInstallError = false;
+  // bool _hasPushedTempError = false;
+  // bool _hasPushedBatteryError = false;
 
   // LogManager _logManager = LogManager();
 
@@ -175,7 +175,7 @@ mixin BleMixin on ChangeNotifier {
         connectingStateSubject.add(false);
         scanConnectStateSubject.add(false);
 
-        this.setLeaveTimer();
+        // this.setLeaveTimer();
       }
       if (s == BluetoothDeviceState.disconnected) {
         // notificationManager.show('断开连接');
@@ -245,7 +245,8 @@ mixin BleMixin on ChangeNotifier {
 
             // targetDevice.writeCharacteristic(char, [0xbb, 0x01]);
             notifyListeners();
-            checkChairState();
+            // checkChairState();
+            this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
           });
           // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
           // await Future.delayed(Duration(seconds: 3));
@@ -293,62 +294,63 @@ mixin BleMixin on ChangeNotifier {
     this.alertSubject.add(alertType);
   }
 
-  void setLeaveTimer() async {
-    await this.stopLeaveTimer();
-    // await this
-    //     .notificationManager
-    //     .schedule(id: 111, message: '断开连接', duration: Duration(seconds: 120));
-    this._leaveAlertTimer = Timer(Duration(seconds: 120), () async {
-      // this.notificationManager.show('断开连接');
-      this.showAlertDialog(AlertType.babayInCarWhenLeaving);
+  // void setLeaveTimer() async {
+  //   await this.stopLeaveTimer();
+  //   // await this
+  //   //     .notificationManager
+  //   //     .schedule(id: 111, message: '断开连接', duration: Duration(seconds: 120));
+  //   this._leaveAlertTimer = Timer(Duration(seconds: 120), () async {
+  //     // this.notificationManager.show('断开连接');
+  //     this.showAlertDialog(AlertType.babayInCarWhenLeaving);
 
-      await this.logTime(disconnect: true);
+  //     await this.logTime(disconnect: true);
 
-      this.clearChairState();
-      this.disconnect();
-    });
-  }
+  //     this.clearChairState();
+  //     this.disconnect();
+  //   });
+  // }
 
-  Future stopLeaveTimer() async {
-    // await this.notificationManager.cancel(id: 111);
-    this._leaveAlertTimer?.cancel();
-    return;
-  }
+  // Future stopLeaveTimer() async {
+  //   // await this.notificationManager.cancel(id: 111);
+  //   this._leaveAlertTimer?.cancel();
+  //   return;
+  // }
 
-  void checkChairState() {
+  // void checkChairState() {
+  //   this.showAlertDialog(AlertType.babayInCarWhenLeaving);
 
-    if (!this.chairState.allClear && !this._hasPushedInstallError) {
-      this._errorTimer?.cancel();
-      this._hasPushedBatteryError = true;
-      this._errorTimer = Timer(Duration(seconds: 10), () {
-        this.showAlertDialog(AlertType.installErr);
-      });
-    } else if (this.chairState.allClear) {
-      this._hasPushedInstallError = false;
-      this._errorTimer?.cancel();
-    }
+  //   if (!this.chairState.allClear && !this._hasPushedInstallError) {
+  //     this._errorTimer?.cancel();
+  //     this._hasPushedBatteryError = true;
+  //     this._errorTimer = Timer(Duration(seconds: 10), () {
+  //       this.showAlertDialog(AlertType.installErr);
+  //     });
+  //   } else if (this.chairState.allClear) {
+  //     this._hasPushedInstallError = false;
+  //     this._errorTimer?.cancel();
+  //   }
 
-    if (this.chairState.battery < 10 && !this._hasPushedBatteryError) {
-      this._hasPushedBatteryError = true;
-      this.showAlertDialog(AlertType.lowBattery);
-    }
+  //   if (this.chairState.battery < 10 && !this._hasPushedBatteryError) {
+  //     this._hasPushedBatteryError = true;
+  //     this.showAlertDialog(AlertType.lowBattery);
+  //   }
 
-    if (this.temperatureMonitor != null) {
-      if (this.temperatureMonitor.highOn &&
-          this.temperatureMonitor.highLimit < this.chairState.temperature &&
-          !this._hasPushedTempError) {
-        this.showAlertDialog(AlertType.highTemp);
-      } // 高温警报
-      if (this.temperatureMonitor.lowOn &&
-          this.temperatureMonitor.lowLimit > this.chairState.temperature &&
-          !this._hasPushedTempError) {
-        this.showAlertDialog(AlertType.highTemp);
-      } // 低温警报
-      if (this.temperatureMonitor.lowLimit < this.chairState.temperature &&
-          this.temperatureMonitor.highLimit > this.chairState.temperature &&
-          this._hasPushedTempError) {
-        this._hasPushedTempError = false;
-      } // 温度警报重置
-    }
-  }
+  //   if (this.temperatureMonitor != null) {
+  //     if (this.temperatureMonitor.highOn &&
+  //         this.temperatureMonitor.highLimit < this.chairState.temperature &&
+  //         !this._hasPushedTempError) {
+  //       this.showAlertDialog(AlertType.highTemp);
+  //     } // 高温警报
+  //     if (this.temperatureMonitor.lowOn &&
+  //         this.temperatureMonitor.lowLimit > this.chairState.temperature &&
+  //         !this._hasPushedTempError) {
+  //       this.showAlertDialog(AlertType.highTemp);
+  //     } // 低温警报
+  //     if (this.temperatureMonitor.lowLimit < this.chairState.temperature &&
+  //         this.temperatureMonitor.highLimit > this.chairState.temperature &&
+  //         this._hasPushedTempError) {
+  //       this._hasPushedTempError = false;
+  //     } // 温度警报重置
+  //   }
+  // }
 }

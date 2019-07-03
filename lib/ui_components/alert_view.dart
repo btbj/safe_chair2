@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:safe_chair2/model/ChairState.dart';
 import 'package:safe_chair2/l10n/app_localizations.dart';
 import 'package:safe_chair2/model/l10nType.dart';
-import 'package:safe_chair2/util/notification_manager.dart';
+// import 'package:safe_chair2/util/notification_manager.dart';
 
 class AlertView {
   static Future show(BuildContext context, AlertType type) {
-    NotificationManager notificationManager = NotificationManager();
-    notificationManager.init();
-    notificationManager.show(context, type);
+    // NotificationManager notificationManager = NotificationManager();
+    // notificationManager.init();
+    // notificationManager.show(context, type);
     return showDialog(
       context: context,
       barrierDismissible: false,
