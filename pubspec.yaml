@@ -64,6 +64,7 @@ flutter:
    - lib/assets/img/logo/
    - lib/assets/img/state_icon/
    - lib/assets/img/chair_img/
+   - lib/assets/img/chair_img_wd001/
    - lib/assets/img/tab_bar/
 
   # An image asset can refer to one or more resolution-specific "variants", see

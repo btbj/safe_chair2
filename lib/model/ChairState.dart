@@ -11,6 +11,7 @@ class ChairState {
 
   int get battery => value[4];
   int get temperature => value[3];
+  int get version => value[1];
 
   bool get allClear => stateInt == 63;
   bool get leg => (stateInt >> 5) % 2 == 1;
