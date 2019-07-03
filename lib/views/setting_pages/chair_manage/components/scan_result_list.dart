@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/chair_control_info.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:safe_chair2/ui_components/indicator.dart';
 import 'package:safe_chair2/ui_components/toast.dart';
+import './connect_indicator.dart';
 
 class ScanResultList extends StatefulWidget {
   @override
@@ -79,12 +79,12 @@ class _ScanResultListState extends State<ScanResultList> {
             style: TextStyle(color: primaryColor),
           ),
           onTap: () {
-            Indicator.show(context);
+            ConnectIndicator.show(context);
             chairControlInfo.connect(item.device);
             connectingSub =
                 chairControlInfo.connectingStateSubject.listen((connecting) {
               if (!connecting) {
-                Indicator.close(context);
+                ConnectIndicator.close(context);
                 connectingSub.cancel();
                 if (chairControlInfo.targetChar == null) {
                   Toast.show(context, msg: '连接失败');

@@ -8,9 +8,9 @@ import './components/password_setting_btn.dart';
 import './components/language_setting_btn.dart';
 import './components/logout_btn.dart';
 import './components/version_box.dart';
-import 'package:provider/provider.dart';
-import 'package:safe_chair2/providers/chair_control_info.dart';
-import 'package:safe_chair2/model/ChairState.dart';
+// import 'package:provider/provider.dart';
+// import 'package:safe_chair2/providers/chair_control_info.dart';
+// import 'package:safe_chair2/model/ChairState.dart';
 
 class SettingPage extends StatelessWidget {
   Widget _buildDivider() {
@@ -53,14 +53,14 @@ class SettingPage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Text('test'),
-        onPressed: () {
-          print('test');
-          ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
-          chairControlInfo.alertSubject.add(AlertType.lowBattery);
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Text('test'),
+      //   onPressed: () {
+      //     print('test');
+      //     ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
+      //     chairControlInfo.alertSubject.add(AlertType.lowBattery);
+      //   },
+      // ),
     );
   }
 }

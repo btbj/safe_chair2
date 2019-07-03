@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/chair_control_info.dart';
 import 'package:safe_chair2/model/Chair.dart';
-import 'package:safe_chair2/ui_components/indicator.dart';
+// import 'package:safe_chair2/ui_components/indicator.dart';
+import './scan_connect_indicator.dart';
 // import 'package:safe_chair2/ui_components/indicator.dart';
 import 'package:safe_chair2/l10n/app_localizations.dart';
 import 'package:safe_chair2/model/l10nType.dart';
@@ -47,13 +48,13 @@ class _ListConnectBtnState extends State<ListConnectBtn> {
               chairControlInfo.clearChairState();
               await chairControlInfo.disconnect();
             } else {
-              Indicator.show(context);
+              ScanConnectIndicator.show(context);
               chairControlInfo.scanToConnect(widget.chair);
               scanConnectSub =
                   chairControlInfo.scanConnectStateSubject.listen((scanning) {
                 print(scanning);
                 if (!scanning) {
-                  Indicator.close(context);
+                  ScanConnectIndicator.close(context);
                   scanConnectSub?.cancel();
                 }
               });

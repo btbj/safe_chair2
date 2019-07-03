@@ -201,6 +201,19 @@ mixin BleMixin on ChangeNotifier {
     return;
   }
 
+  Future cancelConnect() async {
+    await this.disconnect();
+    this.connectingStateSubject.add(false);
+    return;
+  }
+
+  Future cancelScanConnect() async {
+    await this.stopScan();
+    await this.disconnect();
+    this.scanConnectStateSubject.add(false);
+    return;
+  }
+
   void clearChairState() {
     print('clear chair state');
     this.scanStateSubject.add(false);
