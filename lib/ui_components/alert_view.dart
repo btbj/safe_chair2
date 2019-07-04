@@ -25,7 +25,7 @@ class AlertDialogBox extends StatelessWidget {
   String _getMessage(BuildContext context) {
     String msg = '';
     switch (type) {
-      case AlertType.babayInCarWhenLeaving:
+      case AlertType.babyInCarWhenLeaving:
         msg = AppLocalizations.of(context)
             .messageText(MessageType.alert_baby_in_car);
         break;

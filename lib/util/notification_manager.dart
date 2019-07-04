@@ -17,7 +17,8 @@ class NotificationManager {
     var initializationSettingsIOS = new IOSInitializationSettings();
     var initializationSettings = new InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
-    noErr = await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    noErr = await flutterLocalNotificationsPlugin
+        .initialize(initializationSettings);
     return noErr;
   }
 
@@ -25,17 +26,19 @@ class NotificationManager {
     if (!noErr) return;
     String soundName = getSoundName(type);
     String message = getMessage(context, type);
-    
+
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'ble chennel id', 'ble message chennel', 'show ble message',
-        playSound: true, sound: soundName,
-        importance: Importance.Max, priority: Priority.High);
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails(presentSound: true, sound: '$soundName.caf');
+        playSound: true,
+        sound: soundName,
+        importance: Importance.Max,
+        priority: Priority.High);
+    var iOSPlatformChannelSpecifics =
+        new IOSNotificationDetails(presentSound: true, sound: '$soundName.caf');
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, '', message, platformChannelSpecifics,
-        payload: 'item id 2');
+    await flutterLocalNotificationsPlugin
+        .show(0, '', message, platformChannelSpecifics, payload: 'item id 2');
     return;
   }
 
@@ -43,20 +46,29 @@ class NotificationManager {
     if (!noErr) return;
     int id = 1;
     String message = getMessage(context, type);
+    String soundName = getSoundName(type);
     Duration duration = Duration(seconds: 1);
-    if (type == AlertType.babayInCarWhenLeaving) {
+    if (type == AlertType.babyInCarWhenLeaving) {
       id = 2;
       duration = Duration(seconds: 120);
     } else if (type == AlertType.installErr) {
       id = 3;
       duration = Duration(seconds: 10);
     }
+    ChannelInfo channelInfo = getChannelInfo(type);
+
     String title = AppLocalizations.of(context).uiText(UiType.app_title);
     final scheduleTime = new DateTime.now().add(duration);
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'ble channel id2', 'ble schedule chennel name', 'show scheduled ble message',
-        importance: Importance.Max, priority: Priority.High);
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+        channelInfo.channelId,
+        channelInfo.channelName,
+        channelInfo.channelDescription,
+        playSound: true,
+        sound: soundName,
+        importance: Importance.Max,
+        priority: Priority.High);
+    var iOSPlatformChannelSpecifics =
+        new IOSNotificationDetails(presentSound: true, sound: '$soundName.caf');
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
@@ -67,7 +79,7 @@ class NotificationManager {
 
   Future cancel(AlertType type) async {
     int id = 1;
-    if (type == AlertType.babayInCarWhenLeaving) {
+    if (type == AlertType.babyInCarWhenLeaving) {
       id = 2;
     } else if (type == AlertType.installErr) {
       id = 3;
@@ -79,20 +91,25 @@ class NotificationManager {
   String getMessage(BuildContext context, AlertType type) {
     String message = '';
     switch (type) {
-      case AlertType.babayInCarWhenLeaving:
-        message = AppLocalizations.of(context).messageText(MessageType.alert_baby_in_car);
+      case AlertType.babyInCarWhenLeaving:
+        message = AppLocalizations.of(context)
+            .messageText(MessageType.alert_baby_in_car);
         break;
       case AlertType.installErr:
-        message = AppLocalizations.of(context).messageText(MessageType.alert_install_err);
+        message = AppLocalizations.of(context)
+            .messageText(MessageType.alert_install_err);
         break;
       case AlertType.lowBattery:
-        message = AppLocalizations.of(context).messageText(MessageType.alert_low_battery);
+        message = AppLocalizations.of(context)
+            .messageText(MessageType.alert_low_battery);
         break;
       case AlertType.highTemp:
-        message = AppLocalizations.of(context).messageText(MessageType.alert_high_temp);
+        message = AppLocalizations.of(context)
+            .messageText(MessageType.alert_high_temp);
         break;
       case AlertType.lowTemp:
-        message = AppLocalizations.of(context).messageText(MessageType.alert_low_temp);
+        message = AppLocalizations.of(context)
+            .messageText(MessageType.alert_low_temp);
         break;
       default:
         message = 'error';
@@ -102,30 +119,59 @@ class NotificationManager {
 }
 
 String getSoundName(AlertType type) {
-    String sound;
-    switch (type) {
-      case AlertType.babayInCarWhenLeaving:
-        sound = 'baby_in_car_alert';
-        break;
-      // case AlertType.enterRegion:
-      //   sound = 'enter_region';
-      //   break;
-      // case AlertType.exitRegion:
-      //   sound = 'exit_region';
-      //   break;
-      case AlertType.installErr:
-        sound = 'install_err';
-        break;
-      case AlertType.lowBattery:
-        sound = 'low_battery';
-        break;
-      case AlertType.highTemp:
-        sound = 'temp_alert';
-        break;
-      case AlertType.lowTemp:
-        sound = 'temp_alert';
-        break;
-      default:
-    }
-    return sound;
+  String sound;
+  switch (type) {
+    case AlertType.babyInCarWhenLeaving:
+      sound = 'baby_in_car_alert';
+      break;
+    // case AlertType.enterRegion:
+    //   sound = 'enter_region';
+    //   break;
+    // case AlertType.exitRegion:
+    //   sound = 'exit_region';
+    //   break;
+    case AlertType.installErr:
+      sound = 'install_err';
+      break;
+    case AlertType.lowBattery:
+      sound = 'low_battery';
+      break;
+    case AlertType.highTemp:
+      sound = 'temp_alert';
+      break;
+    case AlertType.lowTemp:
+      sound = 'temp_alert';
+      break;
+    default:
   }
+  return sound;
+}
+
+class ChannelInfo {
+  String channelId;
+  String channelName;
+  String channelDescription;
+  ChannelInfo(this.channelId, this.channelName, this.channelDescription);
+}
+
+ChannelInfo getChannelInfo(AlertType type) {
+  switch (type) {
+    case AlertType.babyInCarWhenLeaving:
+      return ChannelInfo('sId1', 'baby_in_car', 'babyInCarWhenLeaving');
+      break;
+    case AlertType.installErr:
+      return ChannelInfo('sId2', 'install_err', 'chair setup error');
+      break;
+    case AlertType.highTemp:
+      return ChannelInfo('sId3', 'temp_alert', 'temperature critical');
+      break;
+    case AlertType.lowTemp:
+      return ChannelInfo('sId3', 'temp_alert', 'temperature critical');
+      break;
+    case AlertType.lowBattery:
+      return ChannelInfo('sId4', 'battery_alert', 'battery level critical');
+      break;
+    default:
+      return null;
+  }
+}

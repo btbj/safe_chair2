@@ -23,7 +23,7 @@ class ChairState {
 }
 
 enum AlertType {
-  babayInCarWhenLeaving,
+  babyInCarWhenLeaving,
   installErr,
   lowBattery,
   highTemp,

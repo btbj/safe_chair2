@@ -57,7 +57,7 @@ class _HomeRootState extends State<HomeRoot> {
   }
 
   void checkChairState() {
-    this.setTimer(AlertType.babayInCarWhenLeaving);
+    this.setTimer(AlertType.babyInCarWhenLeaving);
     ChairState chairState = this.widget.chairControlInfo.chairState;
     TemperatureMonitor temperatureMonitor =
         this.widget.chairControlInfo.temperatureMonitor;
@@ -103,7 +103,7 @@ class _HomeRootState extends State<HomeRoot> {
   void setTimer(AlertType alertType) async {
     await this.stopAlertTimer(alertType);
     await this.notificationManager.schedule(context, alertType);
-    if (alertType == AlertType.babayInCarWhenLeaving) {
+    if (alertType == AlertType.babyInCarWhenLeaving) {
       this.leaveAlertTimer = Timer(Duration(seconds: 120), () async {
         Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
         this._changeTabPage(0);
@@ -123,7 +123,7 @@ class _HomeRootState extends State<HomeRoot> {
 
   Future stopAlertTimer(AlertType alertType) async {
     await this.notificationManager.cancel(alertType);
-    if (alertType == AlertType.babayInCarWhenLeaving) {
+    if (alertType == AlertType.babyInCarWhenLeaving) {
       this.leaveAlertTimer?.cancel();
     }
     if (alertType == AlertType.installErr) {
