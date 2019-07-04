@@ -30,6 +30,9 @@ class ScanBtn extends StatelessWidget {
         enName: res['data']['product']['en_name'],
         enModel: res['data']['product']['en_model'],
       ));
+    } else {
+      chairControlInfo.disconnect();
+      chairControlInfo.cancelAllAlertSubject.add(true);
     }
   }
 
