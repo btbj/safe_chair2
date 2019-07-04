@@ -7,6 +7,7 @@ import 'package:safe_chair2/util/ble.dart';
 
 class ChairControlInfo with ChangeNotifier, BleMixin{
   ChairControlInfo() {
+    this.initChair();
     this.initBle();
   }
   // ChairState _chairState;
@@ -27,9 +28,13 @@ class ChairControlInfo with ChangeNotifier, BleMixin{
   Chair get targetChair => _targetChair;
   set targetChair(Chair value) {
     this._targetChair = value;
+    Chair.setCurrentChair(value);
     notifyListeners();
   }
 
-  
+  void initChair() async {
+    this._targetChair = await Chair.getCurrentChair();
+    return;
+  }
 
 }

@@ -47,6 +47,7 @@ class _ListConnectBtnState extends State<ListConnectBtn> {
             if (connected) {
               chairControlInfo.clearChairState();
               await chairControlInfo.disconnect();
+              chairControlInfo.cancelAllAlertSubject.add(true);
             } else {
               ScanConnectIndicator.show(context);
               chairControlInfo.scanToConnect(widget.chair);
@@ -56,6 +57,10 @@ class _ListConnectBtnState extends State<ListConnectBtn> {
                 if (!scanning) {
                   ScanConnectIndicator.close(context);
                   scanConnectSub?.cancel();
+                  bool newConnected = widget.chair.mac == chairControlInfo.connectedDevice.name;
+                  if (newConnected) {
+                    chairControlInfo.targetChair = widget.chair;
+                  }
                 }
               });
             }

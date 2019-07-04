@@ -88,6 +88,11 @@ class NotificationManager {
     return;
   }
 
+  Future cancelAll() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+    return;
+  }
+
   String getMessage(BuildContext context, AlertType type) {
     String message = '';
     switch (type) {
@@ -157,7 +162,7 @@ class ChannelInfo {
 ChannelInfo getChannelInfo(AlertType type) {
   switch (type) {
     case AlertType.babyInCarWhenLeaving:
-      return ChannelInfo('sId1', 'baby_in_car', 'babyInCarWhenLeaving');
+      return ChannelInfo('sId1', 'baby_in_car', 'baby in car when leaving');
       break;
     case AlertType.installErr:
       return ChannelInfo('sId2', 'install_err', 'chair setup error');

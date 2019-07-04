@@ -80,7 +80,7 @@ class ChairList extends StatelessWidget {
           onTap: () {
             print('select chair');
             if (selected) {
-              chairControlInfo.targetChair = null;
+              // chairControlInfo.targetChair = null;
             } else {
               chairControlInfo.targetChair = chair;
             }

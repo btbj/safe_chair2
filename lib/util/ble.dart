@@ -19,6 +19,7 @@ mixin BleMixin on ChangeNotifier {
 
   NotificationManager notificationManager = NotificationManager();
   BehaviorSubject<AlertType> alertSubject = BehaviorSubject();
+  PublishSubject<bool> cancelAllAlertSubject = PublishSubject();
 
   ChairState _chairState;
   ChairState get chairState => _chairState;
@@ -122,6 +123,7 @@ mixin BleMixin on ChangeNotifier {
     connectingStateSubject.close();
     deviceStateSubject.close();
     alertSubject.close();
+    cancelAllAlertSubject.close();
   }
 
   void startScan() async {
