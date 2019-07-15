@@ -172,4 +172,15 @@ class Chair {
     await prefs.setString(nameMapKey, newDataString);
     return;
   }
+
+  static String checkMac(String deviceName) {
+    if (deviceName == 'BLE003U') return deviceName;
+    RegExp namePattern = RegExp(r"^WD[\d]{3}([\d\w]{12})$");
+    RegExp macPattern = RegExp(r"([\d\w]{12})$");
+    if (namePattern.hasMatch(deviceName)) {
+      return macPattern.stringMatch(deviceName);
+    } else {
+      return null;
+    }
+  }
 }

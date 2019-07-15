@@ -11,8 +11,8 @@ import 'package:safe_chair2/model/TemperatureMonitor.dart';
 
 mixin BleMixin on ChangeNotifier {
   bool _notificationNoErr = false;
-  bool get notificationNoErr=> _notificationNoErr;
-  bool get bluetoothIsOn=> this._state == BluetoothState.on;
+  bool get notificationNoErr => _notificationNoErr;
+  bool get bluetoothIsOn => this._state == BluetoothState.on;
 
   FlutterBlue _flutterBlue = FlutterBlue.instance;
   FlutterBlue get flutterBlue => _flutterBlue;
@@ -135,7 +135,9 @@ mixin BleMixin on ChangeNotifier {
     // _scanning = true;
     _scanSubscription =
         _flutterBlue.scan(timeout: Duration(seconds: 10)).listen((scanResult) {
-      this._scanResults[scanResult.device.id] = scanResult;
+          if (Chair.checkMac(scanResult.device.name) != null) {
+            this._scanResults[scanResult.device.id] = scanResult;
+          }
       // print('found one');
       notifyListeners();
     }, onDone: stopScan);
@@ -233,7 +235,7 @@ mixin BleMixin on ChangeNotifier {
     await valueChangedSubscriptions?.cancel();
     valueChangedSubscriptions = null;
     // if (device != null) {
-    //   notificationManager.show('断开连接');
+    //   notificationManager.show('���开连接');
     // }
     this._device = null;
     this.deviceStateSubject.add(BluetoothDeviceState.disconnected);

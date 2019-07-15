@@ -11,6 +11,7 @@ import './components/version_box.dart';
 // import 'package:provider/provider.dart';
 // import 'package:safe_chair2/providers/chair_control_info.dart';
 // import 'package:safe_chair2/model/ChairState.dart';
+import 'package:safe_chair2/model/Chair.dart';
 
 class SettingPage extends StatelessWidget {
   Widget _buildDivider() {
@@ -53,14 +54,15 @@ class SettingPage extends StatelessWidget {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: Text('test'),
-      //   onPressed: () {
-      //     print('test');
-      //     ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
-      //     chairControlInfo.alertSubject.add(AlertType.lowBattery);
-      //   },
-      // ),
+      floatingActionButton: FloatingActionButton(
+        child: Text('test'),
+        onPressed: () {
+          print('test');
+          // ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
+          String mac = Chair.checkMac('BLE003U');
+          print(mac);
+        },
+      ),
     );
   }
 }

@@ -103,7 +103,8 @@ class AppLocalizations {
         UiType.cancel_btn: 'Cancel',
         UiType.edit_device_name_title: 'Edit Device Name',
         UiType.delete_device_dialog_title: 'Delete Device',
-        UiType.delete_device_dialog_message: 'Do you want to delete this device?',
+        UiType.delete_device_dialog_message:
+            'Do you want to delete this device?',
       },
       name: 'uiText',
       args: [type],
@@ -171,7 +172,8 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
 // 苹果系统长按多语言补丁
 
-class CupertinoLocalizationsDelegate extends LocalizationsDelegate<CupertinoLocalizations> {
+class CupertinoLocalizationsDelegate
+    extends LocalizationsDelegate<CupertinoLocalizations> {
   const CupertinoLocalizationsDelegate();
 
   @override
@@ -180,14 +182,14 @@ class CupertinoLocalizationsDelegate extends LocalizationsDelegate<CupertinoLoca
   @override
   Future<CupertinoLocalizations> load(Locale locale) {
     return SynchronousFuture<_DefaultCupertinoLocalizations>(
-      _DefaultCupertinoLocalizations(locale.languageCode)
-    );
+        _DefaultCupertinoLocalizations(locale.languageCode));
   }
 
   @override
   bool shouldReload(CupertinoLocalizationsDelegate old) => false;
 
-  static CupertinoLocalizationsDelegate delegate = const CupertinoLocalizationsDelegate();
+  static CupertinoLocalizationsDelegate delegate =
+      const CupertinoLocalizationsDelegate();
 }
 
 class _DefaultCupertinoLocalizations extends CupertinoLocalizations {
@@ -200,19 +202,21 @@ class _DefaultCupertinoLocalizations extends CupertinoLocalizations {
       'copy': 'Copy',
       'paste': 'Paste',
       'cut': 'Cut',
-      'selectAll': 'Select all'
+      'selectAll': 'Select all',
+      'today': 'Today'
     },
     'zh': {
       'alert': '提示',
       'copy': '复制',
       'paste': '粘贴',
       'cut': '剪切',
-      'selectAll': '全选'
+      'selectAll': '全选',
+      'today': '今天'
     }
   };
 
-  _DefaultCupertinoLocalizations(this._languageCode):
-    assert(_languageCode != null);
+  _DefaultCupertinoLocalizations(this._languageCode)
+      : assert(_languageCode != null);
 
   @override
   String get alertDialogLabel => _get('alert');
@@ -236,19 +240,25 @@ class _DefaultCupertinoLocalizations extends CupertinoLocalizations {
   String get selectAllButtonLabel => _get('selectAll');
 
   @override
+  String get todayLabel => _get('today');
+
+  @override
   DatePickerDateOrder get datePickerDateOrder => _en.datePickerDateOrder;
 
   @override
-  DatePickerDateTimeOrder get datePickerDateTimeOrder => _en.datePickerDateTimeOrder;
+  DatePickerDateTimeOrder get datePickerDateTimeOrder =>
+      _en.datePickerDateTimeOrder;
 
   @override
-  String datePickerDayOfMonth(int dayIndex) => _en.datePickerDayOfMonth(dayIndex);
+  String datePickerDayOfMonth(int dayIndex) =>
+      _en.datePickerDayOfMonth(dayIndex);
 
   @override
   String datePickerHour(int hour) => _en.datePickerHour(hour);
 
   @override
-  String datePickerHourSemanticsLabel(int hour) => _en.datePickerHourSemanticsLabel(hour);
+  String datePickerHourSemanticsLabel(int hour) =>
+      _en.datePickerHourSemanticsLabel(hour);
 
   @override
   String datePickerMediumDate(DateTime date) => _en.datePickerMediumDate(date);
@@ -257,7 +267,8 @@ class _DefaultCupertinoLocalizations extends CupertinoLocalizations {
   String datePickerMinute(int minute) => _en.datePickerMinute(minute);
 
   @override
-  String datePickerMinuteSemanticsLabel(int minute) => _en.datePickerMinuteSemanticsLabel(minute);
+  String datePickerMinuteSemanticsLabel(int minute) =>
+      _en.datePickerMinuteSemanticsLabel(minute);
 
   @override
   String datePickerMonth(int monthIndex) => _en.datePickerMonth(monthIndex);
@@ -275,13 +286,15 @@ class _DefaultCupertinoLocalizations extends CupertinoLocalizations {
   String timerPickerMinute(int minute) => _en.timerPickerMinute(minute);
 
   @override
-  String timerPickerMinuteLabel(int minute) => _en.timerPickerMinuteLabel(minute);
+  String timerPickerMinuteLabel(int minute) =>
+      _en.timerPickerMinuteLabel(minute);
 
   @override
   String timerPickerSecond(int second) => _en.timerPickerSecond(second);
 
   @override
-  String timerPickerSecondLabel(int second) => _en.timerPickerSecondLabel(second);
+  String timerPickerSecondLabel(int second) =>
+      _en.timerPickerSecondLabel(second);
 
   String _get(String key) {
     return _dict[_languageCode][key];

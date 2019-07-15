@@ -18,13 +18,16 @@ class ScanBtn extends StatelessWidget {
     ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
     BluetoothDevice connectedDevice = chairControlInfo.connectedDevice;
     if (connectedDevice == null) return;
+    String mac = Chair.checkMac(connectedDevice.name.toString());
     final res = await chairManageInfo.getChairInfoByMac(
-        token: appInfo.user.token, mac: connectedDevice.name);
+      token: appInfo.user.token,
+      mac: mac,
+    );
     Toast.show(context, msg: res['message']);
     if (res['success']) {
       chairManageInfo.addChair(Chair(
         uuid: connectedDevice.id.toString(),
-        mac: connectedDevice.name.toString(),
+        mac: mac,
         name: res['data']['product']['name'],
         model: res['data']['product']['model'],
         enName: res['data']['product']['en_name'],
