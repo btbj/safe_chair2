@@ -174,13 +174,19 @@ class Chair {
   }
 
   static String checkMac(String deviceName) {
+    // BLE003U
     if (deviceName == 'BLE003U') return deviceName;
+
+    // WD001C7E4E3E2E1B8
     RegExp namePattern = RegExp(r"^WD[\d]{3}([\d\w]{12})$");
-    RegExp macPattern = RegExp(r"([\d\w]{12})$");
-    if (namePattern.hasMatch(deviceName)) {
-      return macPattern.stringMatch(deviceName);
-    } else {
-      return null;
-    }
+    if (namePattern.hasMatch(deviceName)) return deviceName;
+
+    // // C7E4E3E2E1B8
+    // RegExp macPattern = RegExp(r"([\d\w]{12})$");
+    // if (namePattern.hasMatch(deviceName)) {
+    //   return macPattern.stringMatch(deviceName);
+    // }
+
+    return null;
   }
 }

@@ -53,9 +53,9 @@ class _HomeRootState extends State<HomeRoot> {
       // this._changeTabPage(0);
       // AlertView.show(context, alertType);
     });
-    this.widget.chairControlInfo.cancelAllAlertSubject.listen((cancelAll) {
+    this.widget.chairControlInfo.cancelAllAlertSubject.listen((cancelAll) async {
       if (cancelAll) {
-        this.notificationManager.cancelAll();
+        await this.notificationManager.cancelAll();
         this.leaveAlertTimer?.cancel();
         this.installErrAlertTimer?.cancel();
       }

@@ -89,7 +89,7 @@ class _ScanResultListState extends State<ScanResultList> {
                 if (chairControlInfo.targetChar == null) {
                   Toast.show(context, msg: '连接失败');
                 } else {
-                  Toast.show(context, msg: '连接成功');
+                  // Toast.show(context, msg: '连接成功');
                   Navigator.pop(context);
                 }
               }

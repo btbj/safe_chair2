@@ -35,6 +35,7 @@ class ScanBtn extends StatelessWidget {
       ));
     } else {
       chairControlInfo.disconnect();
+      chairControlInfo.clearChairState();
       chairControlInfo.cancelAllAlertSubject.add(true);
     }
   }
