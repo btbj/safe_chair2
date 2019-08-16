@@ -13,6 +13,10 @@ import 'package:safe_chair2/model/l10nType.dart';
 class ChairList extends StatelessWidget {
   Widget _buildEditingBox(BuildContext context, Chair chair,
       ChairManageInfo chairManageInfo, ChairControlInfo chairControlInfo) {
+        bool connected = false;
+      if (chairControlInfo.connectedDevice != null) {
+        connected = chair.mac == chairControlInfo.connectedDevice.name;
+      }
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -42,9 +46,14 @@ class ChairList extends StatelessWidget {
             final String message = AppLocalizations.of(context)
                 .uiText(UiType.delete_device_dialog_message);
             BasicDialog.pop(context, message: message, title: title)
-                .then((confirm) {
+                .then((confirm) async {
               if (confirm == true) {
                 print('confirm');
+                if (connected) {
+                  chairControlInfo.clearChairState();
+                  await chairControlInfo.disconnect();
+                  chairControlInfo.cancelAllAlertSubject.add(true);
+                }
                 chairManageInfo.deleteChair(chair);
                 chairControlInfo.targetChair = null;
               }
