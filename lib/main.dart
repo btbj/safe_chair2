@@ -7,6 +7,7 @@ import 'package:safe_chair2/views/splash/splash.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/app_info.dart';
 import 'package:safe_chair2/providers/chair_control_info.dart';
+import 'package:safe_chair2/providers/article_list_info.dart';
 
 void main() async {
   // 设置不能横屏
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AppInfo>(builder: (context) => AppInfo()),
         ChangeNotifierProvider<ChairControlInfo>(builder: (context) => ChairControlInfo()),
+        ChangeNotifierProvider<ArticleListInfo>(builder: (context) => ArticleListInfo(title: 'help', cateId: '1')),
       ],
       child: MyAppRoot(),
     );

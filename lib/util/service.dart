@@ -22,12 +22,12 @@ Future request(String apiPath, {@required Map data}) async {
     dio.options.baseUrl = serviceUrl;
     dio.options.connectTimeout = 10000;
     dio.options.receiveTimeout = 10000;
-    if (isEN) {
+    if (isEN && data['lang'] == null) {
       data['lang'] = 'en';
     }
     print('url: $serviceUrl$apiPath, data: $data');
     response = await dio.post(apiPath, data: data);
-    print(response);
+    // print(response);
     return response.data;
     
   } on DioError catch(e) {

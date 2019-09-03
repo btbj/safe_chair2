@@ -158,6 +158,9 @@ class _HomeRootState extends State<HomeRoot> {
       openUrl('http://welldonqcyp.m.tmall.com/');
       return;
     }
+    if (index == 3) {
+
+    }
     setState(() {
       _tabIndex = index;
     });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/app_info.dart';
+import 'package:safe_chair2/providers/article_list_info.dart';
 import 'package:safe_chair2/l10n/app_localizations.dart';
 import 'package:safe_chair2/model/l10nType.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +16,7 @@ class LanguageSettingPage extends StatelessWidget {
 
   Widget _buildChineseLine(bool isEN) {
     return Consumer<AppInfo>(builder: (context, appInfo, _) {
+      ArticleListInfo articleListInfo = Provider.of<ArticleListInfo>(context);
       final Color primaryColor = Theme.of(context).primaryColor;
       return ListTile(
         title: Text('中文', style: TextStyle(color: primaryColor, fontSize: 16)),
@@ -23,6 +25,7 @@ class LanguageSettingPage extends StatelessWidget {
           if (isEN) {
             Intl.defaultLocale = 'zh';
             appInfo.locale = Locale('zh');
+            articleListInfo.lang = 'zh';
           }
         },
       );
@@ -32,6 +35,7 @@ class LanguageSettingPage extends StatelessWidget {
 
   Widget _buildEnglishLine(bool isEN) {
     return Consumer<AppInfo>(builder: (context, appInfo, _) {
+      ArticleListInfo articleListInfo = Provider.of<ArticleListInfo>(context);
       final Color primaryColor = Theme.of(context).primaryColor;
       return ListTile(
         title: Text('English', style: TextStyle(color: primaryColor, fontSize: 16)),
@@ -40,6 +44,7 @@ class LanguageSettingPage extends StatelessWidget {
           if (!isEN) {
             Intl.defaultLocale = 'en';
             appInfo.locale = Locale('en');
+            articleListInfo.lang = 'en';
           }
         },
       );

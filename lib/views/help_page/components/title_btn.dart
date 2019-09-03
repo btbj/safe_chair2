@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:safe_chair2/model/Article.dart';
 import './detail_page.dart';
 
 class TitleBtn extends StatelessWidget {
-  final String title;
-  final String content;
-  TitleBtn({this.title, this.content});
+  final Article article;
+  TitleBtn({this.article});
 
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).primaryColor;
     return ListTile(
-      title: Text(title, style: TextStyle(color: primaryColor)),
+      title: Text(article.title, style: TextStyle(color: primaryColor)),
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailPage(title: title, content: content),
+            builder: (context) => DetailPage(article: article),
           ),
         );
       },
