@@ -90,6 +90,7 @@ class _ScanResultListState extends State<ScanResultList> {
                   Toast.show(context, msg: '连接失败');
                 } else {
                   // Toast.show(context, msg: '连接成功');
+                  // print('pop out');
                   Navigator.pop(context);
                 }
               }

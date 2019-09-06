@@ -9,9 +9,9 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = Theme.of(context).primaryColor;
+    // final Color primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
@@ -25,6 +25,7 @@ class DetailPage extends StatelessWidget {
           FutureBuilder<Object>(
               future: article.getContent(),
               builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) return Container();
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   // child: Text(
@@ -33,7 +34,7 @@ class DetailPage extends StatelessWidget {
                   // ),
                   child: HtmlWidget(
                     article.content,
-                    textStyle: TextStyle(color: primaryColor),
+                    // textStyle: TextStyle(color: primaryColor),
                   ),
                 );
               }),

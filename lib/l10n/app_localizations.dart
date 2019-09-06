@@ -239,8 +239,8 @@ class _DefaultCupertinoLocalizations extends CupertinoLocalizations {
   @override
   String get selectAllButtonLabel => _get('selectAll');
 
-  @override
-  String get todayLabel => _get('today');
+  // @override
+  // String get todayLabel => _get('today');
 
   @override
   DatePickerDateOrder get datePickerDateOrder => _en.datePickerDateOrder;

@@ -167,9 +167,12 @@ mixin BleMixin on ChangeNotifier {
     // notifyListeners();
 
     _deviceStateSubscription = targetDevice.onStateChanged().listen((s) async {
+      print('===========================');
+      print(s);
       this.deviceStateSubject.add(s);
       // notifyListeners();
       if (s == BluetoothDeviceState.connected) {
+        print('connected');
         this._device = targetDevice;
         // await StoreManager.saveLastConnectedDevice(targetDevice);
         await this.scanServices(targetDevice);
@@ -266,7 +269,7 @@ mixin BleMixin on ChangeNotifier {
             this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
           });
           // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
-          // await Future.delayed(Duration(seconds: 3));
+          await Future.delayed(Duration(seconds: 2));
           targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
         }
       }

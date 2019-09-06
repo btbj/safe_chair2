@@ -17,6 +17,8 @@ class AppInfo with ChangeNotifier {
 
   String _versionName;
   String get versionName => _versionName;
+  String _versionCode;
+  String get versionCode => _versionCode;
 
   User _user;
   User get user => _user;
@@ -74,6 +76,7 @@ class AppInfo with ChangeNotifier {
   void getVersionInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _versionName = packageInfo.version;
+    _versionCode = packageInfo.buildNumber;
   }
 
   Future initLang() async {

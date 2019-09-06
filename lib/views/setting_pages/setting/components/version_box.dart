@@ -21,7 +21,7 @@ class VersionBox extends StatelessWidget {
           SizedBox(height: 3),
           Text(
             AppLocalizations.of(context).uiText(UiType.version_prefix) +
-                appInfo.versionName,
+                appInfo.versionName + '(' + appInfo.versionCode + ')',
             style: textStyle,
           ),
           SizedBox(height: 3),
