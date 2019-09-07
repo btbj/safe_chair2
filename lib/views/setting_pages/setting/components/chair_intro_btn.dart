@@ -10,20 +10,29 @@ import 'package:safe_chair2/model/Chair.dart';
 class ChairIntroBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ChairControlInfo _chairControlInfo = Provider.of<ChairControlInfo>(context);
-    Chair targetChair = _chairControlInfo.targetChair;
-    return MenuNav(
-      label: AppLocalizations.of(context).uiText(UiType.chair_intro_title),
-      endLabel: targetChair == null ? '' : targetChair.nameText,
-      onTap: () {
-        print('nav to chair intro');
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChairIntroPage(chair: _chairControlInfo.targetChair),
-          ),
-        );
-      },
-    );
+    // ChairControlInfo _chairControlInfo = Provider.of<ChairControlInfo>(context);
+    // Chair targetChair = _chairControlInfo.targetChair;
+    return Consumer<ChairControlInfo>(builder: (context, _chairControlInfo, _) {
+      Chair targetChair = _chairControlInfo.targetChair;
+      print(targetChair != null ? targetChair.uuid : '');
+      return MenuNav(
+        label: AppLocalizations.of(context).uiText(UiType.chair_intro_title),
+        endLabel: targetChair == null ? '' : targetChair.nameText,
+        onTap: () {
+          print('nav to chair intro');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  ChairIntroPage(chair: _chairControlInfo.targetChair),
+            ),
+          ).then((_) async {
+            // print('aaa');
+            _chairControlInfo.targetChair = await Chair.getCurrentChair();
+            print(targetChair != null ? targetChair.uuid : '');
+          });
+        },
+      );
+    });
   }
 }

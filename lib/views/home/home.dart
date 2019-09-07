@@ -55,6 +55,7 @@ class _HomeRootState extends State<HomeRoot> {
     });
     this.widget.chairControlInfo.cancelAllAlertSubject.listen((cancelAll) async {
       if (cancelAll) {
+        this.widget.chairControlInfo.cancelAllAlertSubject.add(false);
         await this.notificationManager.cancelAll();
         this.leaveAlertTimer?.cancel();
         this.installErrAlertTimer?.cancel();
@@ -108,8 +109,10 @@ class _HomeRootState extends State<HomeRoot> {
   }
 
   void setTimer(AlertType alertType) async {
+    /// 每次检查座椅状态时都设置一个timer
     await this.stopAlertTimer(alertType);
     await this.notificationManager.schedule(context, alertType);
+    print('schedule $alertType');
     if (alertType == AlertType.babyInCarWhenLeaving) {
       this.leaveAlertTimer = Timer(Duration(seconds: 120), () async {
         Navigator.popUntil(context, (route) => route.settings.isInitialRoute);

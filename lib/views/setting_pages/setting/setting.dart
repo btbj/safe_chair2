@@ -11,7 +11,8 @@ import './components/version_box.dart';
 // import 'package:provider/provider.dart';
 // import 'package:safe_chair2/providers/chair_control_info.dart';
 // import 'package:safe_chair2/model/ChairState.dart';
-import 'package:safe_chair2/model/Chair.dart';
+// import 'package:safe_chair2/model/Chair.dart';
+// import 'package:safe_chair2/util/notification_manager.dart';
 
 class SettingPage extends StatelessWidget {
   Widget _buildDivider() {
@@ -54,15 +55,20 @@ class SettingPage extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Text('test'),
-        onPressed: () {
-          print('test');
-          // ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
-          String mac = Chair.checkMac('BLE003U');
-          print(mac);
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Text('Msg'),
+      //   onPressed: () async {
+      //     print('test');
+      //     // // ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
+      //     // String mac = Chair.checkMac('BLE003U');
+      //     // print(mac);
+      //     final nm = NotificationManager();
+      //     if (await nm.init()) {
+      //       nm.test(context, Duration(seconds: 2));
+      //       // nm.pushMsg(context, 'aaa');
+      //     }
+      //   },
+      // ),
     );
   }
 }

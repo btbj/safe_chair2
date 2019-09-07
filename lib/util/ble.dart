@@ -269,7 +269,7 @@ mixin BleMixin on ChangeNotifier {
             this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
           });
           // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
-          await Future.delayed(Duration(seconds: 2));
+          // await Future.delayed(Duration(seconds: 2));
           targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
         }
       }

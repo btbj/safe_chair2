@@ -38,7 +38,7 @@ class ChairInstructionInfo with ChangeNotifier {
 
   void getChairInfo({String token, Chair chair}) async {
     print('get chair info');
-    if (chair == null) return;
+    if (chair == null) return null;
     
     final res = await service.request(
       '/device/get_info_by_mac',
@@ -49,12 +49,25 @@ class ChairInstructionInfo with ChangeNotifier {
     );
     print('r: $res');
     if (res['success'] && res['data']['product'] != null) {
-      this._range = res['data']['product']['useful_area'];
-      this._enRange = res['data']['product']['en_useful_area'];
-      this._installType = res['data']['product']['setup_type'];
-      this._enInstallType = res['data']['product']['en_setup_type'];
-      this._installVideoUrl = res['data']['product']['setup_video_url'];
-      this._enInstallVideoUrl = res['data']['product']['en_setup_video_url'];
+      Map json = res['data']['product'];
+      this._range = json['useful_area'];
+      this._enRange = json['en_useful_area'];
+      this._installType = json['setup_type'];
+      this._enInstallType = json['en_setup_type'];
+      this._installVideoUrl = json['setup_video_url'];
+      this._enInstallVideoUrl = json['en_setup_video_url'];
+      Chair newChair = Chair(
+        uuid: targetChair.uuid,
+        mac: targetChair.mac,
+        name: json['name'],
+        model: json['model'],
+        enName: json['enName'],
+        enModel: json['enModel'],
+      );
+      await Chair.saveChair(newChair);
+      print('======new=======');
+      print(newChair.uuid);
+      this._targetChair = newChair;
       notifyListeners();
     }
   }

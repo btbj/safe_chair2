@@ -66,7 +66,7 @@ class Chair {
     return jsonEncode(map);
   }
 
-  static Chair parse(Map json) {
+  factory Chair.parse(Map json) {
     try {
       return Chair(
         uuid: json['uuid'],
@@ -91,7 +91,7 @@ class Chair {
 
   static Future saveChair(Chair chair) async {
     final savedChair = await getChairMap();
-    if (savedChair.containsKey(chair.mac)) return;
+    // if (savedChair.containsKey(chair.mac)) return;
 
     savedChair[chair.mac] = {
       'uuid': chair.uuid,
@@ -105,6 +105,11 @@ class Chair {
     final prefs = await SharedPreferences.getInstance();
     final newDataString = jsonEncode(savedChair);
     await prefs.setString(listKey, newDataString);
+    final Chair currentChair = await getCurrentChair();
+    if (currentChair != null && currentChair.mac == chair.mac) {
+      await setCurrentChair(chair);
+    }
+
     return;
   }
 
@@ -122,6 +127,7 @@ class Chair {
     final prefs = await SharedPreferences.getInstance();
     final newDataString = jsonEncode(savedChair);
     await prefs.setString(listKey, newDataString);
+    
     return;
   }
 
@@ -141,16 +147,20 @@ class Chair {
       await prefs.setString(currentKey, null);
       return null;
     }
-    final Chair currentChair = await getCurrentChair();
-    if (currentChair != null && currentChair.mac == chair.mac) {
-      await prefs.setString(currentKey, null);
-      return null;
-    } else {
-      final String chairString = Chair.stringfy(chair);
+    // final Chair currentChair = await getCurrentChair();
+    final String chairString = Chair.stringfy(chair);
 
-      await prefs.setString(currentKey, chairString);
-      return chair;
-    }
+    await prefs.setString(currentKey, chairString);
+    return chair;
+    // if (currentChair != null && currentChair.mac == chair.mac) {
+    //   await prefs.setString(currentKey, null);
+    //   return null;
+    // } else {
+    //   final String chairString = Chair.stringfy(chair);
+
+    //   await prefs.setString(currentKey, chairString);
+    //   return chair;
+    // }
   }
 
   static Future<Map> getNameMap() async {

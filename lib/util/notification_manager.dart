@@ -26,9 +26,12 @@ class NotificationManager {
     if (!noErr) return;
     String soundName = getSoundName(type);
     String message = getMessage(context, type);
+    ChannelInfo channelInfo = getChannelInfo(type);
 
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        'ble chennel id', 'ble message chennel', 'show ble message',
+        channelInfo.channelId,
+        channelInfo.channelName,
+        channelInfo.channelDescription,
         playSound: true,
         sound: soundName,
         importance: Importance.Max,
@@ -41,6 +44,28 @@ class NotificationManager {
         .show(0, '', message, platformChannelSpecifics, payload: 'item id 2');
     return;
   }
+
+  // Future test(BuildContext context, Duration d) async {
+  //   String soundName = getSoundName(AlertType.babyInCarWhenLeaving);
+  //   ChannelInfo channelInfo = getChannelInfo(AlertType.babyInCarWhenLeaving);
+  //   final scheduleTime = new DateTime.now().add(d);
+  //   var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+  //       channelInfo.channelId,
+  //       channelInfo.channelName,
+  //       channelInfo.channelDescription,
+  //       playSound: true,
+  //       sound: soundName,
+  //       importance: Importance.Max,
+  //       priority: Priority.High);
+  //   var iOSPlatformChannelSpecifics =
+  //       new IOSNotificationDetails(presentSound: true, sound: '$soundName.caf');
+  //   var platformChannelSpecifics = new NotificationDetails(
+  //       androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  //   await flutterLocalNotificationsPlugin.schedule(
+  //       999, 'weldon', 'test info', scheduleTime, platformChannelSpecifics,
+  //       payload: 'item id 2');
+  //   return;
+  // }
 
   Future schedule(BuildContext context, AlertType type) async {
     if (!noErr) return;
@@ -58,6 +83,8 @@ class NotificationManager {
     ChannelInfo channelInfo = getChannelInfo(type);
 
     String title = AppLocalizations.of(context).uiText(UiType.app_title);
+    print('----------------------');
+    print(duration.inSeconds);
     final scheduleTime = new DateTime.now().add(duration);
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         channelInfo.channelId,
