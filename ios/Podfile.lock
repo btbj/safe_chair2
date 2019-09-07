@@ -31,7 +31,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `.symlinks/flutter/ios-release`)
   - flutter_blue (from `.symlinks/plugins/flutter_blue/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -49,7 +49,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
   flutter_blue:
     :path: ".symlinks/plugins/flutter_blue/ios"
   flutter_local_notifications:
