@@ -35,9 +35,9 @@ class Chair {
   String get nameText {
     bool isEN = checkEnglish();
     if (isEN) {
-      return enName;
+      return enName ?? '';
     } else {
-      return name;
+      return name ?? '';
     }
   }
 

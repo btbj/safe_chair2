@@ -14,12 +14,12 @@ class ChairIntroBtn extends StatelessWidget {
     // Chair targetChair = _chairControlInfo.targetChair;
     return Consumer<ChairControlInfo>(builder: (context, _chairControlInfo, _) {
       Chair targetChair = _chairControlInfo.targetChair;
-      print(targetChair != null ? targetChair.uuid : '');
+      // print(targetChair != null ? targetChair.uuid : '');
       return MenuNav(
         label: AppLocalizations.of(context).uiText(UiType.chair_intro_title),
         endLabel: targetChair == null ? '' : targetChair.nameText,
         onTap: () {
-          print('nav to chair intro');
+          // print('nav to chair intro');
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -29,7 +29,7 @@ class ChairIntroBtn extends StatelessWidget {
           ).then((_) async {
             // print('aaa');
             _chairControlInfo.targetChair = await Chair.getCurrentChair();
-            print(targetChair != null ? targetChair.uuid : '');
+            // print(targetChair != null ? targetChair.uuid : '');
           });
         },
       );

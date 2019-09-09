@@ -83,8 +83,6 @@ class NotificationManager {
     ChannelInfo channelInfo = getChannelInfo(type);
 
     String title = AppLocalizations.of(context).uiText(UiType.app_title);
-    print('----------------------');
-    print(duration.inSeconds);
     final scheduleTime = new DateTime.now().add(duration);
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         channelInfo.channelId,

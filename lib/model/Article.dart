@@ -20,7 +20,7 @@ class Article {
     final res = await service.request('/article/info', data: {
       'id': this.id,
     });
-    print(res);
+    // print(res);
     if (res['success']) {
       title = res['data']['info']['title'];
       content = res['data']['info']['content'];

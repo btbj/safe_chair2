@@ -61,12 +61,10 @@ class ChairInstructionInfo with ChangeNotifier {
         mac: targetChair.mac,
         name: json['name'],
         model: json['model'],
-        enName: json['enName'],
-        enModel: json['enModel'],
+        enName: json['en_name'],
+        enModel: json['en_model'],
       );
       await Chair.saveChair(newChair);
-      print('======new=======');
-      print(newChair.uuid);
       this._targetChair = newChair;
       notifyListeners();
     }

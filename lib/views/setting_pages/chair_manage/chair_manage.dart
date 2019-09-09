@@ -8,7 +8,7 @@ import 'package:safe_chair2/model/l10nType.dart';
 import './components/chair_list.dart';
 import './components/scan_btn.dart';
 import './components/editing_btn.dart';
-import './components/connect_indicator.dart';
+// import './components/connect_indicator.dart';
 
 class ChairManagePage extends StatelessWidget {
   @override
@@ -44,13 +44,13 @@ class ChairManagePage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Text('test'),
-          onPressed: () {
-            print('test');
-            ConnectIndicator.show(context);
-          },
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   child: Text('test'),
+        //   onPressed: () {
+        //     print('test');
+        //     ConnectIndicator.show(context);
+        //   },
+        // ),
       ),
     );
   }
