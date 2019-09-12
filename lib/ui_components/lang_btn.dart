@@ -12,7 +12,6 @@ class LangBtn extends StatelessWidget {
       final textstyleSelected = TextStyle(color: Theme.of(context).primaryColor);
 
       return Container(
-        margin: EdgeInsets.only(bottom: 30),
         child: FlatButton(
           child: Row(
             mainAxisSize: MainAxisSize.min,

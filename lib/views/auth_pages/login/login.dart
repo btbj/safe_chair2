@@ -24,13 +24,19 @@ class LoginPage extends StatelessWidget {
               Container(
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 100),
+                    SizedBox(height: 60),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        LangBtn(),
+                      ],
+                    ),
                     LogoBox(),
                     SizedBox(height: 100),
                     LoginForm(),
                     SizedBox(height: 15),
                     NavRow(),
-                    SizedBox(height: 100),
+                    SizedBox(height: 80),
                     LoginBtn(),
                     SizedBox(height: 10),
                     PolicyRow(),
@@ -39,7 +45,7 @@ class LoginPage extends StatelessWidget {
               ),
             ],
           ),
-          floatingActionButton: LangBtn(),
+          // floatingActionButton: LangBtn(),
         ),
       ),
     );
