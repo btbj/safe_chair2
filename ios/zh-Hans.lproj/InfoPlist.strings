@@ -7,4 +7,6 @@
 */
 {
     CFBundleDisplayName = "惠尔顿";
+    NSBluetoothPeripheralUsageDescription = "需要使用蓝牙连接座椅设备";
+    NSBluetoothAlwaysUsageDescription = "需要使用蓝牙持续连接监测座椅设备连接情况";
 }

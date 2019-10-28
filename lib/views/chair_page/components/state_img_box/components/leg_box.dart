@@ -26,7 +26,7 @@ class LegBox extends StatelessWidget {
             image: AssetImage('lib/assets/img/state_icon/icon6.png'),
             color: _getBlendColor(_chairControlInfo),
             colorBlendMode: BlendMode.color,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
       );

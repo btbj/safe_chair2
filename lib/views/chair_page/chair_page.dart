@@ -14,41 +14,45 @@ class ChairPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            HeadBar(
-              title: AppLocalizations.of(context).uiText(UiType.chair_title),
-            ),
-            HeadMsg(),
-            Expanded(
-              flex: 5,
-              child: StateImgBox(),
-            ),
-            Expanded(flex: 3, child: BleStateBar()),
-            Expanded(flex: 2, child: TemperatureBox()),
-            Expanded(flex: 2, child: BatteryBox()),
-            // Expanded(
-            //   child: ListView(
-            //     children: <Widget>[
-            //       Container(
-            //         height: MediaQuery.of(context).size.height - 180,
-            //         child: Column(
-            //           // mainAxisSize: MainAxisSize.max,
-            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //           children: <Widget>[
-            //             HeadMsg(),
-            //             StateImgBox(),
-            //             BleStateBar(),
-            //             TemperatureBox(),
-            //             BatteryBox(),
-            //           ],
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // )
-          ],
+        child: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              HeadBar(
+                title: AppLocalizations.of(context).uiText(UiType.chair_title),
+              ),
+              HeadMsg(),
+              Expanded(
+                flex: 5,
+                child: StateImgBox(),
+              ),
+              SizedBox(height: 10),
+              Expanded(flex: 3, child: BleStateBar()),
+              SizedBox(height: 10),
+              Container(height: 100, child: TemperatureBox()),
+              Container(height: 150, child: BatteryBox()),
+              // Expanded(
+              //   child: ListView(
+              //     children: <Widget>[
+              //       Container(
+              //         height: MediaQuery.of(context).size.height - 180,
+              //         child: Column(
+              //           // mainAxisSize: MainAxisSize.max,
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           children: <Widget>[
+              //             HeadMsg(),
+              //             StateImgBox(),
+              //             BleStateBar(),
+              //             TemperatureBox(),
+              //             BatteryBox(),
+              //           ],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // )
+            ],
+          ),
         ),
       ),
     );

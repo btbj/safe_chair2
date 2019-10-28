@@ -7,4 +7,6 @@
 */
 {
     CFBundleDisplayName = "Welldon";
+    NSBluetoothPeripheralUsageDescription = "Need use bluetooth to connect your chair device";
+    NSBluetoothAlwaysUsageDescription = "Need use bluetooth to keep connection with your chair device";
 }

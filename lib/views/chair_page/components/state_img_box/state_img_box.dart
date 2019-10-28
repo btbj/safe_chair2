@@ -10,14 +10,15 @@ import './components/leg_box.dart';
 class StateImgBox extends StatelessWidget {
   Widget _buildLeftList() {
     return Container(
-      height: 220,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          BuckleBox(),
-          LFixBox(),
-          RFixBox(),
+          Expanded(flex: 1, child: BuckleBox()),
+          SizedBox(height: 5),
+          Expanded(flex: 1, child: LFixBox()),
+          SizedBox(height: 5),
+          Expanded(flex: 1, child: RFixBox()),
         ],
       ),
     );
@@ -25,14 +26,15 @@ class StateImgBox extends StatelessWidget {
 
   Widget _buildRigheList() {
     return Container(
-      height: 220,
       child: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          RoutationBox(),
-          PadBox(),
-          LegBox(),
+          Expanded(flex: 1, child: RoutationBox()),
+          SizedBox(height: 5),
+          Expanded(flex: 1, child: PadBox()),
+          SizedBox(height: 5),
+          Expanded(flex: 1, child: LegBox()),
         ],
       ),
     );

@@ -26,7 +26,7 @@ class LFixBox extends StatelessWidget {
             image: AssetImage('lib/assets/img/state_icon/icon2.png'),
             color: _getBlendColor(_chairControlInfo),
             colorBlendMode: BlendMode.color,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
       );
