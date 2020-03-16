@@ -78,9 +78,10 @@ class _ScanResultListState extends State<ScanResultList> {
             item.rssi.toString(),
             style: TextStyle(color: primaryColor),
           ),
-          onTap: () {
+          onTap: () async {
             ConnectIndicator.show(context);
             chairControlInfo.connect(item.device);
+        
             connectingSub =
                 chairControlInfo.connectingStateSubject.listen((connecting) {
               if (!connecting) {

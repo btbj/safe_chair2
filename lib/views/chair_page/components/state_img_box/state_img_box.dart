@@ -14,11 +14,11 @@ class StateImgBox extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Expanded(flex: 1, child: BuckleBox()),
+          BuckleBox(),
           SizedBox(height: 5),
-          Expanded(flex: 1, child: LFixBox()),
+          LFixBox(),
           SizedBox(height: 5),
-          Expanded(flex: 1, child: RFixBox()),
+          RFixBox(),
         ],
       ),
     );
@@ -30,11 +30,11 @@ class StateImgBox extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Expanded(flex: 1, child: RoutationBox()),
+          RoutationBox(),
           SizedBox(height: 5),
-          Expanded(flex: 1, child: PadBox()),
+          PadBox(),
           SizedBox(height: 5),
-          Expanded(flex: 1, child: LegBox()),
+          LegBox(),
         ],
       ),
     );

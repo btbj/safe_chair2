@@ -11,7 +11,7 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+25
+version: 1.0.0+26
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -28,16 +28,14 @@ dependencies:
 
   provider: ^2.0.1
   dio: ^2.1.5
-  intl: ^0.15.8
+  intl: ^0.16.0
   shared_preferences: ^0.5.3+1
-  package_info: ^0.4.0+4
-  flutter_blue:
-    git:
-      url: git://github.com/rmawatson/flutter_blue.git
+  package_info: ^0.4.0
+  flutter_blue: ^0.6.3+1
   flutter_local_notifications: ^0.8.2
   rxdart: ^0.22.0
   flutter_easyrefresh: ^2.0.3
-  flutter_widget_from_html: 0.1.5
+  flutter_widget_from_html: ^0.2.4+1
 
 dev_dependencies:
   flutter_test:

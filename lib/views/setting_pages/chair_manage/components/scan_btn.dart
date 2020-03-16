@@ -49,10 +49,22 @@ class ScanBtn extends StatelessWidget {
           print('add chair');
           ChairControlInfo chairControlInfo =
               Provider.of<ChairControlInfo>(context);
-          await chairControlInfo.refreshBleState();
-          if (chairControlInfo.state != BluetoothState.on) {
-            Toast.show(context, msg: '请打开蓝牙');
-          } else {
+          // await chairControlInfo.refreshBleState();
+          // if (chairControlInfo.state != BluetoothState.on) {
+          //   Toast.show(context, msg: '请打开蓝牙');
+          // } else {
+          //   chairControlInfo.startScan();
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => ScanListPage(),
+          //     ),
+          //   ).then((_) {
+          //     chairControlInfo.stopScan();
+          //     this.checkConnectedDevice(context, chairManageInfo);
+          //   });
+          // }
+          if (await FlutterBlue.instance.isOn) {
             chairControlInfo.startScan();
             Navigator.push(
               context,
@@ -60,9 +72,11 @@ class ScanBtn extends StatelessWidget {
                 builder: (context) => ScanListPage(),
               ),
             ).then((_) {
-              chairControlInfo.stopScan();
+              FlutterBlue.instance.stopScan();
               this.checkConnectedDevice(context, chairManageInfo);
             });
+          } else {
+            Toast.show(context, msg: 'Please Turn On Bluetooth');
           }
         },
       );
