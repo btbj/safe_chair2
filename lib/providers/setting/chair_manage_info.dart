@@ -8,13 +8,16 @@ class ChairManageInfo with ChangeNotifier {
     initChairNameMap();
     initChairList();
   }
+  bool _mounted = true;
   List<Chair> _chairList = [];
   List<Chair> get chairList => _chairList;
   bool _editing = false;
   bool get editing => _editing;
   set editing(bool value) {
     this._editing = value;
-    notifyListeners();
+    if (_mounted) {
+      notifyListeners();
+    }
   }
 
   Map _chairNameMap = {};
@@ -25,14 +28,18 @@ class ChairManageInfo with ChangeNotifier {
     this._chairList = List<Chair>.generate(map.length, (index) {
       return Chair.parse(map.values.toList()[index]);
     });
-    notifyListeners();
+    if (_mounted) {
+      notifyListeners();
+    }
     return;
   }
 
   Future initChairNameMap() async {
     final map = await Chair.getNameMap();
     this._chairNameMap = map;
-    notifyListeners();
+    if (_mounted) {
+      notifyListeners();
+    }
     return;
   }
 
@@ -43,21 +50,27 @@ class ChairManageInfo with ChangeNotifier {
       this._chairNameMap[chair.uuid] = name;
     }
     await chair.saveName(name);
-    notifyListeners();
+    if (_mounted) {
+      notifyListeners();
+    }
     return;
   }
 
   Future addChair(Chair chair) async {
     this._chairList.add(chair);
     await Chair.saveChair(chair);
-    notifyListeners();
+    if (_mounted) {
+      notifyListeners();
+    }
     return;
   }
 
   Future deleteChair(Chair chair) async {
     this._chairList.remove(chair);
     await Chair.removeChair(chair);
-    notifyListeners();
+    if (_mounted) {
+      notifyListeners();
+    }
     return;
   }
 
@@ -73,5 +86,11 @@ class ChairManageInfo with ChangeNotifier {
     );
     print('r: $res');
     return res;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _mounted = false;
   }
 }
