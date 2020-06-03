@@ -174,15 +174,11 @@ mixin BleMixin on ChangeNotifier {
       if (s == BluetoothDeviceState.connected) {
         print('connected');
         this._device = targetDevice;
-        // await StoreManager.saveLastConnectedDevice(targetDevice);
         await this.scanServices(targetDevice);
-        // notifyListeners();
 
         await this.logTime();
         connectingStateSubject.add(false);
         scanConnectStateSubject.add(false);
-
-        // this.setLeaveTimer();
       }
       // if (s == BluetoothDeviceState.disconnected && this._device != null) {
       //   // notificationManager.show('断开连接');
@@ -268,11 +264,8 @@ mixin BleMixin on ChangeNotifier {
       for (BluetoothCharacteristic char in chars) {
         if (char.uuid.toString() == targetUUIDString) {
           this.targetChar = char;
-          await this.targetChar.setNotifyValue(true);
-          valueChangedSubscriptions =
-              this.targetChar.value.listen((List<int> value) {
+          valueChangedSubscriptions = this.targetChar.value.listen((List<int> value) {
             this._value = value;
-            print('value is: $value');
             if (value.isNotEmpty && value.length == 6) {
               this._chairState = ChairState(value);
               
@@ -282,6 +275,7 @@ mixin BleMixin on ChangeNotifier {
               this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
             }
           });
+          await this.targetChar.setNotifyValue(true);
           // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
           // await Future.delayed(Duration(seconds: 2));
           this.targetChar.write([0xaa, 0x01, 0xbb, 0xbc]);

@@ -32,6 +32,7 @@ class NotificationManager {
         channelInfo.channelId,
         channelInfo.channelName,
         channelInfo.channelDescription,
+        icon: 'app_icon',
         playSound: true,
         sound: RawResourceAndroidNotificationSound(soundName),
         importance: Importance.Max,
@@ -82,23 +83,24 @@ class NotificationManager {
     }
     ChannelInfo channelInfo = getChannelInfo(type);
 
-    // String title = AppLocalizations.of(context).uiText(UiType.app_title);
-    final scheduleTime = new DateTime.now().add(duration);
-    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-        channelInfo.channelId,
-        channelInfo.channelName,
-        channelInfo.channelDescription,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound(soundName),
-        importance: Importance.Max,
-        priority: Priority.High);
+    String title = AppLocalizations.of(context).uiText(UiType.app_title);
+    final scheduleTime = DateTime.now().add(duration);
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      channelInfo.channelId,
+      channelInfo.channelName,
+      channelInfo.channelDescription,
+      icon: 'app_icon',
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound(soundName),
+      importance: Importance.Max,
+      priority: Priority.High,
+    );
     var iOSPlatformChannelSpecifics =
-        new IOSNotificationDetails(presentSound: true, sound: '$soundName.caf');
-    var platformChannelSpecifics = new NotificationDetails(
+        IOSNotificationDetails(presentSound: true, sound: '$soundName.caf');
+    var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.schedule(
-        id, '', message, scheduleTime, platformChannelSpecifics,
-        payload: 'item id 2');
+        id, title, message, scheduleTime, platformChannelSpecifics);
     return;
   }
 
@@ -187,19 +189,24 @@ class ChannelInfo {
 ChannelInfo getChannelInfo(AlertType type) {
   switch (type) {
     case AlertType.babyInCarWhenLeaving:
-      return ChannelInfo('WelldonAlertChannel1', 'baby_in_car', 'baby in car when leaving');
+      return ChannelInfo(
+          'WelldonAlertChannel1', 'baby_in_car', 'baby in car when leaving');
       break;
     case AlertType.installErr:
-      return ChannelInfo('WelldonAlertChannel2', 'install_err', 'chair setup error');
+      return ChannelInfo(
+          'WelldonAlertChannel2', 'install_err', 'chair setup error');
       break;
     case AlertType.highTemp:
-      return ChannelInfo('WelldonAlertChannel3', 'temp_alert', 'temperature critical');
+      return ChannelInfo(
+          'WelldonAlertChannel3', 'temp_alert', 'temperature critical');
       break;
     case AlertType.lowTemp:
-      return ChannelInfo('WelldonAlertChannel3', 'temp_alert', 'temperature critical');
+      return ChannelInfo(
+          'WelldonAlertChannel3', 'temp_alert', 'temperature critical');
       break;
     case AlertType.lowBattery:
-      return ChannelInfo('WelldonAlertChannel4', 'battery_alert', 'battery level critical');
+      return ChannelInfo(
+          'WelldonAlertChannel4', 'battery_alert', 'battery level critical');
       break;
     default:
       return null;

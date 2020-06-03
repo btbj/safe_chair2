@@ -80,8 +80,6 @@ class _ScanResultListState extends State<ScanResultList> {
           ),
           onTap: () async {
             ConnectIndicator.show(context);
-            chairControlInfo.connect(item.device);
-        
             connectingSub =
                 chairControlInfo.connectingStateSubject.listen((connecting) {
               if (!connecting) {
@@ -96,6 +94,7 @@ class _ScanResultListState extends State<ScanResultList> {
                 }
               }
             });
+            chairControlInfo.connect(item.device);
           },
         );
       });

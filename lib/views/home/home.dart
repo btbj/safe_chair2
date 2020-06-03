@@ -12,6 +12,7 @@ import 'package:safe_chair2/providers/app_info.dart';
 import 'package:safe_chair2/ui_components/alert_view.dart';
 import 'package:safe_chair2/util/notification_manager.dart';
 import 'package:safe_chair2/model/ChairState.dart';
+// import 'package:safe_chair2/util/service.dart' as service;
 
 class HomePage extends StatelessWidget {
   @override
@@ -48,13 +49,16 @@ class _HomeRootState extends State<HomeRoot> {
     this.notificationManager.init();
     this.widget.appInfo.initLang();
     this.widget.chairControlInfo.alertSubject.listen((_) {
-      try {
-        this.checkChairState();
-      } catch (e) {
-        print(e);
-      }
+      this.checkChairState();
+      // await service.request('/api/error', data: {
+      //   'error': this.widget.chairControlInfo.chairState.value.toString(),
+      // });
     });
-    this.widget.chairControlInfo.cancelAllAlertSubject.listen((cancelAll) async {
+    this
+        .widget
+        .chairControlInfo
+        .cancelAllAlertSubject
+        .listen((cancelAll) async {
       if (cancelAll) {
         this.widget.chairControlInfo.cancelAllAlertSubject.add(false);
         await this.notificationManager.cancelAll();
@@ -116,7 +120,7 @@ class _HomeRootState extends State<HomeRoot> {
     /// 每次检查座椅状态时都设置一个timer
     await this.stopAlertTimer(alertType);
     await this.notificationManager.schedule(context, alertType);
-    print('schedule $alertType');
+    // print('schedule $alertType');
     if (alertType == AlertType.babyInCarWhenLeaving) {
       this.leaveAlertTimer = Timer(Duration(seconds: 120), () async {
         this.navigateBack();
@@ -167,9 +171,7 @@ class _HomeRootState extends State<HomeRoot> {
       openUrl('http://welldonqcyp.m.tmall.com/');
       return;
     }
-    if (index == 3) {
-
-    }
+    if (index == 3) {}
     setState(() {
       _tabIndex = index;
     });

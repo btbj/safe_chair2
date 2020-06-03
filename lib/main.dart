@@ -105,7 +105,7 @@ class MyAppRoot extends StatelessWidget {
       return MaterialApp(
           onGenerateTitle: (context) =>
               AppLocalizations.of(context).uiText(UiType.app_title),
-          debugShowCheckedModeBanner: false,
+          // debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primaryColor: Color.fromARGB(255, 217, 132, 44),
           ),
