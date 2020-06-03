@@ -184,19 +184,24 @@ mixin BleMixin on ChangeNotifier {
 
         // this.setLeaveTimer();
       }
-      if (s == BluetoothDeviceState.disconnected && this._device != null) {
-        // notificationManager.show('断开连接');
-        // await Future.delayed(Duration(seconds: 30));
-        // reconnect();
-        this.connect(this._device);
-      }
+      // if (s == BluetoothDeviceState.disconnected && this._device != null) {
+      //   // notificationManager.show('断开连接');
+      //   // await Future.delayed(Duration(seconds: 30));
+      //   // reconnect();
+      //   this.connect(this._device);
+      // }
     });
-
+    Future<bool> returnValue;
     targetDevice.connect().timeout(Duration(seconds: 10), onTimeout: () {
       print('timeout');
+      returnValue = Future.value(false);
       targetDevice.disconnect();
+    }).then((data) {
+      if (returnValue == null) {
+        returnValue = Future.value(true);
+      }
     });
-    return true;
+    return returnValue;
   }
 
   Future logTime({bool disconnect = false}) async {
@@ -235,6 +240,9 @@ mixin BleMixin on ChangeNotifier {
 
   Future disconnect() async {
     print('disconnect');
+    if (this._device != null) {
+      await this._device.disconnect();
+    }
     await _deviceStateSubscription?.cancel();
     _deviceStateSubscription = null;
     // await _deviceConnection?.cancel();
@@ -262,15 +270,17 @@ mixin BleMixin on ChangeNotifier {
           this.targetChar = char;
           await this.targetChar.setNotifyValue(true);
           valueChangedSubscriptions =
-              this.targetChar.value.listen((value) {
+              this.targetChar.value.listen((List<int> value) {
             this._value = value;
             print('value is: $value');
-            this._chairState = ChairState(value);
-
-            // targetDevice.writeCharacteristic(char, [0xbb, 0x01]);
-            notifyListeners();
-            // checkChairState();
-            this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
+            if (value.isNotEmpty && value.length == 6) {
+              this._chairState = ChairState(value);
+              
+              // targetDevice.writeCharacteristic(char, [0xbb, 0x01]);
+              notifyListeners();
+              // checkChairState();
+              this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
+            }
           });
           // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
           // await Future.delayed(Duration(seconds: 2));

@@ -7,6 +7,15 @@ class ChairState {
         assert(rawValue.length == 6) {
     this.value = rawValue;
     this.stateInt = rawValue[2];
+    // battery
+    if (this.value[4]<0) this.value[4] = 0;
+    else if (this.value[4] > 100) this.value[4] = 100;
+    //temperature
+    if (this.value[3] < 0) this.value[3] = 0;
+    else if (this.value[3] > 100) this.value[3] = 100;
+    //stateInt
+    if (this.stateInt < 0) this.stateInt = 0;
+    else if (this.stateInt > 63) this.stateInt = 63;
   }
 
   int get battery => value[4];
