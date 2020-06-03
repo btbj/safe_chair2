@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:safe_chair2/providers/app_info.dart';
 import 'package:safe_chair2/providers/chair_control_info.dart';
 import 'package:safe_chair2/providers/article_list_info.dart';
+import 'package:safe_chair2/util/service.dart' as service;
 
 void main() async {
   // 设置不能横屏
@@ -38,6 +39,10 @@ void main() async {
 
   Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
     print('catch error=' + error.toString());
+    await service.request('/api/error', data: {
+      'error': 'error:${error.toString()}:::stackTrace:${stackTrace.toString()}',
+    });
+    return;
   }
 
   FlutterError.onError = (FlutterErrorDetails details) async {
@@ -100,7 +105,7 @@ class MyAppRoot extends StatelessWidget {
       return MaterialApp(
           onGenerateTitle: (context) =>
               AppLocalizations.of(context).uiText(UiType.app_title),
-          // debugShowCheckedModeBanner: false,
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primaryColor: Color.fromARGB(255, 217, 132, 44),
           ),
