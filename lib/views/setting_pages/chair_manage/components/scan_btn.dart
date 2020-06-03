@@ -12,7 +12,7 @@ import 'package:safe_chair2/ui_components/toast.dart';
 import '../scan_list.dart';
 
 class ScanBtn extends StatelessWidget {
-  void checkConnectedDevice(
+  Future checkConnectedDevice(
       BuildContext context, ChairManageInfo chairManageInfo) async {
     AppInfo appInfo = Provider.of<AppInfo>(context);
     ChairControlInfo chairControlInfo = Provider.of<ChairControlInfo>(context);
@@ -38,6 +38,7 @@ class ScanBtn extends StatelessWidget {
       chairControlInfo.clearChairState();
       chairControlInfo.cancelAllAlertSubject.add(true);
     }
+    return;
   }
 
   @override
@@ -71,9 +72,9 @@ class ScanBtn extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => ScanListPage(),
               ),
-            ).then((_) {
+            ).then((_) async {
               FlutterBlue.instance.stopScan();
-              this.checkConnectedDevice(context, chairManageInfo);
+              await this.checkConnectedDevice(context, chairManageInfo);
             });
           } else {
             Toast.show(context, msg: 'Please Turn On Bluetooth');

@@ -48,10 +48,11 @@ class _HomeRootState extends State<HomeRoot> {
     this.notificationManager.init();
     this.widget.appInfo.initLang();
     this.widget.chairControlInfo.alertSubject.listen((_) {
-      this.checkChairState();
-      // Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
-      // this._changeTabPage(0);
-      // AlertView.show(context, alertType);
+      try {
+        this.checkChairState();
+      } catch (e) {
+        print(e);
+      }
     });
     this.widget.chairControlInfo.cancelAllAlertSubject.listen((cancelAll) async {
       if (cancelAll) {
@@ -65,46 +66,49 @@ class _HomeRootState extends State<HomeRoot> {
   }
 
   void checkChairState() {
-    this.setTimer(AlertType.babyInCarWhenLeaving);
     ChairState chairState = this.widget.chairControlInfo.chairState;
+    if (chairState == null) return;
+    this.setTimer(AlertType.babyInCarWhenLeaving);
     TemperatureMonitor temperatureMonitor =
         this.widget.chairControlInfo.temperatureMonitor;
 
     if (!chairState.allClear && !this._hasPushedInstallError) {
       this._hasPushedInstallError = true;
       setTimer(AlertType.installErr);
+      return;
     } else if (chairState.allClear) {
       this._hasPushedInstallError = false;
       this.stopAlertTimer(AlertType.installErr);
-    }
-
-    if (chairState.battery < 10 && !this._hasPushedBatteryError) {
-      Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
-      this._changeTabPage(0);
-      this._hasPushedBatteryError = true;
-      AlertView.show(context, AlertType.lowBattery);
     }
 
     if (temperatureMonitor != null) {
       if (temperatureMonitor.highOn &&
           temperatureMonitor.highLimit < chairState.temperature &&
           !this._hasPushedTempError) {
-        Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
-        this._changeTabPage(0);
+        // 高温警报
+        this.navigateBack();
         AlertView.show(context, AlertType.highTemp);
-      } // 高温警报
-      if (temperatureMonitor.lowOn &&
+        return;
+      } else if (temperatureMonitor.lowOn &&
           temperatureMonitor.lowLimit > chairState.temperature &&
           !this._hasPushedTempError) {
-        Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
-        this._changeTabPage(0);
+        // 低温警报
+        this.navigateBack();
         AlertView.show(context, AlertType.highTemp);
-      } // 低温警报
-      if (temperatureMonitor.lowLimit < chairState.temperature &&
+        return;
+      } else if (temperatureMonitor.lowLimit < chairState.temperature &&
           temperatureMonitor.highLimit > chairState.temperature &&
           this._hasPushedTempError) {
+        // 温度警报重置
         this._hasPushedTempError = false;
-      } // 温度警报重置
+      }
+    }
+
+    if (chairState.battery < 10 && !this._hasPushedBatteryError) {
+      this.navigateBack();
+      this._hasPushedBatteryError = true;
+      AlertView.show(context, AlertType.lowBattery);
+      return;
     }
   }
 
@@ -115,17 +119,14 @@ class _HomeRootState extends State<HomeRoot> {
     print('schedule $alertType');
     if (alertType == AlertType.babyInCarWhenLeaving) {
       this.leaveAlertTimer = Timer(Duration(seconds: 120), () async {
-        Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
-        this._changeTabPage(0);
+        this.navigateBack();
         AlertView.show(context, alertType);
         this.widget.chairControlInfo.clearChairState();
         this.widget.chairControlInfo.disconnect();
       });
-    }
-    if (alertType == AlertType.installErr) {
+    } else if (alertType == AlertType.installErr) {
       this.installErrAlertTimer = Timer(Duration(seconds: 120), () async {
-        Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
-        this._changeTabPage(0);
+        this.navigateBack();
         AlertView.show(context, alertType);
       });
     }
@@ -135,11 +136,15 @@ class _HomeRootState extends State<HomeRoot> {
     await this.notificationManager.cancel(alertType);
     if (alertType == AlertType.babyInCarWhenLeaving) {
       this.leaveAlertTimer?.cancel();
-    }
-    if (alertType == AlertType.installErr) {
+    } else if (alertType == AlertType.installErr) {
       this.installErrAlertTimer?.cancel();
     }
     return;
+  }
+
+  void navigateBack() {
+    Navigator.popUntil(context, (route) => route.settings.isInitialRoute);
+    this._changeTabPage(0);
   }
 
   void openUrl(String url) async {
@@ -151,6 +156,7 @@ class _HomeRootState extends State<HomeRoot> {
   }
 
   void _changeTabPage(int index) {
+    if (index == _tabIndex) return;
     if (index == 1) {
       print('launch web');
       openUrl('http://www.welldon.net.cn/');
