@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 class BatteryIcon extends StatelessWidget {
   final int progress;
   final bool active;
-  BatteryIcon({this.progress, this.active});
+  final bool smallSize;
+  BatteryIcon({this.progress, this.active, this.smallSize});
+  final double height = 50;
+  final double width = 102;
+  
 
   Color getLineColor() {
     if (!active) return Colors.grey;
@@ -24,12 +28,12 @@ class BatteryIcon extends StatelessWidget {
       return Colors.green;
   }
 
-  Widget drawCell() {
+  Widget drawCell({ double scale }) {
     return Stack(
       children: <Widget>[
         Container(
-          width: 102 * progress / 100,
-          height: 50,
+          width: this.width * progress / 100 * scale,
+          height: this.height * scale,
           decoration: BoxDecoration(
             color: getCellColor(),
             borderRadius: BorderRadius.circular(2),
@@ -37,8 +41,8 @@ class BatteryIcon extends StatelessWidget {
           ),
         ),
         Container(
-          width: 102,
-          height: 50,
+          width: this.width * scale,
+          height: this.height * scale,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
             border: Border.all(width: 1, color: getLineColor()),
@@ -50,30 +54,32 @@ class BatteryIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double scale = this.smallSize ? 0.6 : 1;
     return Stack(
       alignment: Alignment.center,
       children: <Widget>[
         Container(
-          width: 110,
-          height: 56,
+          width: 110 * scale,
+          height: 56 * scale,
           child: CustomPaint(
-            painter: BatteryPinter(color: getLineColor()),
+            painter: BatteryPinter(color: getLineColor(), scale: scale),
           ),
         ),
-        drawCell(),
+        drawCell(scale: scale),
       ],
     );
   }
 }
 
 class BatteryPinter extends CustomPainter {
-  final double width = 110;
-  final double height = 56;
-  final double halfCapHeight = 16;
-  final double halfCapSmallHeight = 8;
-  final double r = 4;
+  double width = 110;
+  double height = 56;
+  double halfCapHeight = 16;
+  double halfCapSmallHeight = 8;
+  double r = 4;
   final Color color;
-  BatteryPinter({this.color});
+  final double scale;
+  BatteryPinter({this.color, this.scale});
   @override
   void paint(Canvas canvas, Size size) {
     Path path = new Path();
@@ -125,6 +131,11 @@ class BatteryPinter extends CustomPainter {
       moveTo(Offset(0, 0));
     }
 
+    this.width = this.width  * this.scale;
+    this.height = this.height * this.scale;
+    this.halfCapHeight = this.halfCapHeight * this.scale;
+    this.halfCapSmallHeight = this.halfCapSmallHeight * this.scale;
+    this.r = this.r * this.scale;
     drawBody();
     drawHead();
 

@@ -98,8 +98,8 @@ class ChairList extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(chair.modelText, style: TextStyle(color: primaryColor)),
-            Text(nameText, style: TextStyle(color: primaryColor)),
+            Text(chair.modelText, style: TextStyle(color: primaryColor), overflow: TextOverflow.ellipsis,),
+            Text(nameText, style: TextStyle(color: primaryColor), overflow: TextOverflow.ellipsis,),
           ],
         ),
         trailing: chairManageInfo.editing

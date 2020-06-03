@@ -11,6 +11,7 @@ import './components/battery_box/battery_box.dart';
 class ChairPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    bool smallSize = MediaQuery.of(context).size.height < 700;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -29,8 +30,18 @@ class ChairPage extends StatelessWidget {
               SizedBox(height: 10),
               Expanded(flex: 3, child: BleStateBar()),
               SizedBox(height: 10),
-              Container(height: 100, child: TemperatureBox()),
-              Container(height: 150, child: BatteryBox()),
+              Expanded(
+                flex: smallSize ? 7 : 4,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                        height: smallSize ? 90 : 100, child: TemperatureBox()),
+                    Container(height: smallSize ? 70 : 80, child: BatteryBox())
+                  ],
+                ),
+              ),
+
               // Expanded(
               //   child: ListView(
               //     children: <Widget>[

@@ -18,10 +18,11 @@ class RFixBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChairControlInfo>(builder: (context, _chairControlInfo, _) {
+      bool smallSize = MediaQuery.of(context).size.height < 700;
       return ClipOval(
         child: SizedBox(
-          height: 40,
-          width: 40,
+          height: smallSize ? 20 : 40,
+          width: smallSize ? 20 : 40,
           child: Image(
             image: AssetImage('lib/assets/img/state_icon/icon3.png'),
             color: _getBlendColor(_chairControlInfo),

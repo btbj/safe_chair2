@@ -24,12 +24,15 @@ class TemperatureBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChairControlInfo>(builder: (context, chairControlInfo, _) {
+      final deviceHeight = MediaQuery.of(context).size.height;
+      bool smallSize = false;
+      if (deviceHeight < 700) smallSize = true;
       final int temperature = chairControlInfo.connected
           ? chairControlInfo.chairState.temperature
           : null;
       return Container(
         alignment: Alignment.center,
-        height: 100,
+        height: smallSize ? 50 : 100,
         width: 250,
         decoration: BoxDecoration(
           // color: Colors.green,

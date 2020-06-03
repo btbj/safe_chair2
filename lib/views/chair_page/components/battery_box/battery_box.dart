@@ -10,9 +10,10 @@ class BatteryBox extends StatelessWidget {
     return Consumer<ChairControlInfo>(builder: (context, chairControlInfo, _) {
       final bool active = chairControlInfo.connected;
       final int progress = active ? chairControlInfo.chairState.battery : 0;
+      bool smallSize = MediaQuery.of(context).size.height < 700;
       return Container(
         alignment: Alignment.center,
-        height: 80,
+        height: smallSize ? 60 : 80,
         width: 150,
         decoration: BoxDecoration(
           // color: Colors.grey,
@@ -20,7 +21,7 @@ class BatteryBox extends StatelessWidget {
         ),
         child: Column(
           children: <Widget>[
-            BatteryIcon(active: active, progress: progress),
+            BatteryIcon(active: active, progress: progress, smallSize: smallSize),
             SizedBox(height: 5),
             BatteryText(active: active, progress: progress),
           ],
