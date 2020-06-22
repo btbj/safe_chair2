@@ -149,6 +149,7 @@ mixin BleMixin on ChangeNotifier {
     await _scanSubscription?.cancel();
     _scanSubscription = null;
     this.scanStateSubject.add(false);
+    await FlutterBlue.instance.stopScan();
     // _scanning = false;
     notifyListeners();
     return;
@@ -180,15 +181,15 @@ mixin BleMixin on ChangeNotifier {
         connectingStateSubject.add(false);
         scanConnectStateSubject.add(false);
       }
-      // if (s == BluetoothDeviceState.disconnected && this._device != null) {
-      //   // notificationManager.show('断开连接');
-      //   // await Future.delayed(Duration(seconds: 30));
-      //   // reconnect();
-      //   this.connect(this._device);
-      // }
+      if (s == BluetoothDeviceState.disconnected && this._device != null) {
+        // reconnect
+        if (connectingStateSubject.value == false) {
+          this.connect(this._device);
+        }
+      }
     });
     Future<bool> returnValue;
-    targetDevice.connect().timeout(Duration(seconds: 10), onTimeout: () {
+    targetDevice.connect().timeout(Duration(seconds: 100), onTimeout: () {
       print('timeout');
       returnValue = Future.value(false);
       targetDevice.disconnect();
@@ -288,7 +289,7 @@ mixin BleMixin on ChangeNotifier {
 
   void scanToConnect(Chair chair) async {
     this.scanConnectStateSubject.add(true);
-    // await stopScan();
+    await stopScan();
     await this.disconnect();
     print('start scan');
     this._scanResults.clear();

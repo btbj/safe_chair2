@@ -49,6 +49,7 @@ class _ListConnectBtnState extends State<ListConnectBtn> {
               await chairControlInfo.disconnect();
               chairControlInfo.cancelAllAlertSubject.add(true);
             } else {
+              chairControlInfo.stopScan();
               ScanConnectIndicator.show(context);
               chairControlInfo.scanToConnect(widget.chair);
               scanConnectSub =
