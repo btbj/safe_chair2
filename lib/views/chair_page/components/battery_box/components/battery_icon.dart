@@ -72,6 +72,11 @@ class BatteryIcon extends StatelessWidget {
 }
 
 class BatteryPinter extends CustomPainter {
+  final double kWidth = 110;
+  final double kHeight = 56;
+  final double kHalfCapHeight = 16;
+  final double kHalfCapSmallHeight = 8;
+  final double kR = 4;
   double width = 110;
   double height = 56;
   double halfCapHeight = 16;
@@ -131,11 +136,11 @@ class BatteryPinter extends CustomPainter {
       moveTo(Offset(0, 0));
     }
 
-    this.width = this.width  * this.scale;
-    this.height = this.height * this.scale;
-    this.halfCapHeight = this.halfCapHeight * this.scale;
-    this.halfCapSmallHeight = this.halfCapSmallHeight * this.scale;
-    this.r = this.r * this.scale;
+    this.width = this.kWidth  * this.scale;
+    this.height = this.kHeight * this.scale;
+    this.halfCapHeight = this.kHalfCapHeight * this.scale;
+    this.halfCapSmallHeight = this.kHalfCapSmallHeight * this.scale;
+    this.r = this.kR * this.scale;
     drawBody();
     drawHead();
 
