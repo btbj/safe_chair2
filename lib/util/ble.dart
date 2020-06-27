@@ -8,6 +8,7 @@ import 'package:safe_chair2/model/Chair.dart';
 import 'package:rxdart/subjects.dart';
 // import 'package:safe_chair2/util/LogManager.dart';
 import 'package:safe_chair2/model/TemperatureMonitor.dart';
+// import 'package:safe_chair2/util/service.dart' as httpservice;
 
 mixin BleMixin on ChangeNotifier {
   bool _notificationNoErr = false;
@@ -174,7 +175,6 @@ mixin BleMixin on ChangeNotifier {
       // notifyListeners();
       if (s == BluetoothDeviceState.connected) {
         print('connected');
-        this._device = targetDevice;
         await this.scanServices(targetDevice);
 
         await this.logTime();
@@ -258,31 +258,48 @@ mixin BleMixin on ChangeNotifier {
   Future scanServices(BluetoothDevice targetDevice) async {
     await valueChangedSubscriptions?.cancel();
     valueChangedSubscriptions = null;
-    List<BluetoothService> services = await targetDevice.discoverServices();
 
-    for (BluetoothService service in services) {
-      List<BluetoothCharacteristic> chars = service.characteristics;
-      for (BluetoothCharacteristic char in chars) {
-        if (char.uuid.toString() == targetUUIDString) {
-          this.targetChar = char;
-          valueChangedSubscriptions = this.targetChar.value.listen((List<int> value) {
-            this._value = value;
-            if (value.isNotEmpty && value.length == 6) {
-              this._chairState = ChairState(value);
-              
-              // targetDevice.writeCharacteristic(char, [0xbb, 0x01]);
-              notifyListeners();
-              // checkChairState();
-              this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
-            }
-          });
-          await this.targetChar.setNotifyValue(true);
-          // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
-          // await Future.delayed(Duration(seconds: 2));
-          this.targetChar.write([0xaa, 0x01, 0xbb, 0xbc]);
+    try {
+      List<BluetoothService> services = await targetDevice.discoverServices();
+
+      for (BluetoothService service in services) {
+        List<BluetoothCharacteristic> chars = service.characteristics;
+        for (BluetoothCharacteristic char in chars) {
+          if (char.uuid.toString() == targetUUIDString) {
+            valueChangedSubscriptions = char.value.listen((List<int> value) {
+              this._value = value;
+              if (value.isNotEmpty && value.length == 6) {
+                this._chairState = ChairState(value);
+                
+                // targetDevice.writeCharacteristic(char, [0xbb, 0x01]);
+                notifyListeners();
+                // checkChairState();
+                this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
+              }
+            });
+            bool setNotifyResult = await char.setNotifyValue(true);
+            print(setNotifyResult);
+            // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
+            // await Future.delayed(Duration(seconds: 2));
+            char.write([0xaa, 0x01, 0xbb, 0xbc]);
+            // 完成操作后才重新赋值
+            this.targetChar = char;
+            this._device = targetDevice;
+            // await httpservice.request('/api/error', data: {
+            //   'error': '###connecting info::targetChair:$char, device: $targetDevice, setNotifyResult: $setNotifyResult',
+            // });
+          }
         }
       }
+    } catch (e) {
+      print(e);
+      // has error in establish data connection
+      // do nothing, try skip
+      // await httpservice.request('/api/error', data: {
+      //   'error': '###connecting error::${e.toString()}',
+      // });
     }
+    
 
     return;
   }
