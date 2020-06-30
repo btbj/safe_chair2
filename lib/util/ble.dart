@@ -172,32 +172,51 @@ mixin BleMixin on ChangeNotifier {
       print('===========================');
       print(s);
       this.deviceStateSubject.add(s);
-      // notifyListeners();
-      if (s == BluetoothDeviceState.connected) {
-        print('connected');
-        await this.scanServices(targetDevice);
+      // // notifyListeners();
+      // if (s == BluetoothDeviceState.connected) {
+      //   print('connected');
+      //   await this.scanServices(targetDevice);
 
-        await this.logTime();
-        connectingStateSubject.add(false);
-        scanConnectStateSubject.add(false);
-      }
+      //   // await this.logTime();
+      //   connectingStateSubject.add(false);
+      //   scanConnectStateSubject.add(false);
+      // }
       if (s == BluetoothDeviceState.disconnected && this._device != null) {
         // reconnect
         if (connectingStateSubject.value == false) {
-          this.connect(this._device);
+          await this.scanToConnect(this._device.id);
+          // await httpservice.request('/api/error', data: {
+          //   'error': '###reconnecting info::targetChair:${this._device.id}',
+          // });
+          // this.connect(this._device);
         }
       }
     });
+
     Future<bool> returnValue;
-    targetDevice.connect().timeout(Duration(seconds: 100), onTimeout: () {
-      print('timeout');
-      returnValue = Future.value(false);
-      targetDevice.disconnect();
-    }).then((data) {
+    try {
+      await targetDevice.connect(autoConnect: false).timeout(Duration(seconds: 150), onTimeout: () {
+        print('timeout');
+        returnValue = Future.value(false);
+        // targetDevice.disconnect();
+      });
+    } catch (e) {
+      if (e.code != 'already_connected') {
+        // await httpservice.request('/api/error', data: {
+        //   'error': '###connecting error::targetChair:${e.toString()}',
+        // });
+        print(e);
+      }
+    } finally {
+      print('connected');
+      await this.scanServices(targetDevice);
+
+      connectingStateSubject.add(false);
+      scanConnectStateSubject.add(false);
       if (returnValue == null) {
         returnValue = Future.value(true);
       }
-    });
+    }
     return returnValue;
   }
 
@@ -304,20 +323,20 @@ mixin BleMixin on ChangeNotifier {
     return;
   }
 
-  void scanToConnect(Chair chair) async {
+  Future scanToConnect(DeviceIdentifier targetId) async {
     this.scanConnectStateSubject.add(true);
     await stopScan();
-    await this.disconnect();
+    // await this.disconnect();
     print('start scan');
     this._scanResults.clear();
     this.scanStateSubject.add(true);
     // this._scanning = true;
     _scanSubscription =
         _flutterBlue.scan(timeout: Duration(seconds: 60)).listen(
-      (scanResult) {
-        if (scanResult.device.id == chair.id &&
+      (scanResult) async {
+        if (scanResult.device.id == targetId &&
             scanResult.advertisementData.connectable) {
-          connect(scanResult.device);
+          await connect(scanResult.device);
           // this.scanStateSubject.add(false);
           // this._scanning = false;
         }

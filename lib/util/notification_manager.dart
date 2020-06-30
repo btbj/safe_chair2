@@ -76,7 +76,7 @@ class NotificationManager {
     Duration duration = Duration(seconds: 1);
     if (type == AlertType.babyInCarWhenLeaving) {
       id = 2;
-      duration = Duration(seconds: 120);
+      duration = Duration(seconds: 150);
     } else if (type == AlertType.installErr) {
       id = 3;
       duration = Duration(seconds: 10);

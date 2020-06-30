@@ -51,7 +51,7 @@ class _ListConnectBtnState extends State<ListConnectBtn> {
             } else {
               chairControlInfo.stopScan();
               ScanConnectIndicator.show(context);
-              chairControlInfo.scanToConnect(widget.chair);
+              await chairControlInfo.disconnect();
               scanConnectSub =
                   chairControlInfo.scanConnectStateSubject.listen((scanning) {
                 print(scanning);
@@ -64,6 +64,7 @@ class _ListConnectBtnState extends State<ListConnectBtn> {
                   }
                 }
               });
+              await chairControlInfo.scanToConnect(widget.chair.id);
             }
           },
           shape: StadiumBorder(

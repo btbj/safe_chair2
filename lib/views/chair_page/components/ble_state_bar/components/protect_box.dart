@@ -34,12 +34,12 @@ class _ProtectBoxState extends State<ProtectBox> {
             AppLocalizations.of(context).uiText(UiType.beacon_protecting_text);
 
       return GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (haveChair && !chairControlInfo.connected) {
             Chair chair = chairControlInfo.targetChair;
             print('scan to connect');
             ScanConnectIndicator.show(context);
-            chairControlInfo.scanToConnect(chair);
+            await chairControlInfo.disconnect();
             scanConnectSub =
                 chairControlInfo.scanConnectStateSubject.listen((scanning) {
               print(scanning);
@@ -48,6 +48,7 @@ class _ProtectBoxState extends State<ProtectBox> {
                 scanConnectSub?.cancel();
               }
             });
+            await chairControlInfo.scanToConnect(chair.id);
           } else {
             print('do nothing');
           }

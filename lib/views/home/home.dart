@@ -69,16 +69,24 @@ class _HomeRootState extends State<HomeRoot> {
     super.initState();
   }
 
-  void checkChairState() {
+  void checkChairState() async {
     ChairState chairState = this.widget.chairControlInfo.chairState;
     if (chairState == null) return;
-    this.setTimer(AlertType.babyInCarWhenLeaving);
-    TemperatureMonitor temperatureMonitor =
-        this.widget.chairControlInfo.temperatureMonitor;
+    TemperatureMonitor temperatureMonitor = this.widget.chairControlInfo.temperatureMonitor;
+    
+    if (chairState.babyInCar) {
+      await this.setTimer(AlertType.babyInCarWhenLeaving);
+    } else {
+      await this.stopAlertTimer(AlertType.babyInCarWhenLeaving);
+      return;
+    }
+    // await service.request('/api/error', data: {
+    //   'error': 'baby in car state:: ${chairState.babyInCar}',
+    // });
 
     if (!chairState.allClear && !this._hasPushedInstallError) {
       this._hasPushedInstallError = true;
-      setTimer(AlertType.installErr);
+      await setTimer(AlertType.installErr);
       return;
     } else if (chairState.allClear) {
       this._hasPushedInstallError = false;
@@ -116,24 +124,30 @@ class _HomeRootState extends State<HomeRoot> {
     }
   }
 
-  void setTimer(AlertType alertType) async {
+  Future setTimer(AlertType alertType) async {
     /// 每次检查座椅状态时都设置一个timer
     await this.stopAlertTimer(alertType);
     await this.notificationManager.schedule(context, alertType);
     // print('schedule $alertType');
     if (alertType == AlertType.babyInCarWhenLeaving) {
-      this.leaveAlertTimer = Timer(Duration(seconds: 120), () async {
+      this.leaveAlertTimer?.cancel();
+      this.leaveAlertTimer = Timer(Duration(seconds: 150), () async {
         this.navigateBack();
         AlertView.show(context, alertType);
         this.widget.chairControlInfo.clearChairState();
         this.widget.chairControlInfo.disconnect();
+        // await service.request('/api/error', data: {
+        //   'error': 'show disconnect alert::now',
+        // });
       });
     } else if (alertType == AlertType.installErr) {
+      this.installErrAlertTimer?.cancel();
       this.installErrAlertTimer = Timer(Duration(seconds: 120), () async {
         this.navigateBack();
         AlertView.show(context, alertType);
       });
     }
+    setState(() {}); // 确保Timer被重置
   }
 
   Future stopAlertTimer(AlertType alertType) async {
