@@ -12,7 +12,7 @@ import 'package:safe_chair2/providers/app_info.dart';
 import 'package:safe_chair2/ui_components/alert_view.dart';
 import 'package:safe_chair2/util/notification_manager.dart';
 import 'package:safe_chair2/model/ChairState.dart';
-// import 'package:safe_chair2/util/service.dart' as service;
+import 'package:safe_chair2/util/service.dart' as service;
 
 class HomePage extends StatelessWidget {
   @override
@@ -50,9 +50,6 @@ class _HomeRootState extends State<HomeRoot> {
     this.widget.appInfo.initLang();
     this.widget.chairControlInfo.alertSubject.listen((_) {
       this.checkChairState();
-      // await service.request('/api/error', data: {
-      //   'error': this.widget.chairControlInfo.chairState.value.toString(),
-      // });
     });
     this
         .widget
@@ -71,18 +68,24 @@ class _HomeRootState extends State<HomeRoot> {
 
   void checkChairState() async {
     ChairState chairState = this.widget.chairControlInfo.chairState;
+    await service.request('/api/error', data: {
+      'error': '###chair state:: ${chairState.toString()}',
+    });
     if (chairState == null) return;
     TemperatureMonitor temperatureMonitor = this.widget.chairControlInfo.temperatureMonitor;
     
     if (chairState.babyInCar) {
       await this.setTimer(AlertType.babyInCarWhenLeaving);
+      await service.request('/api/error', data: {
+        'error': '###Reset Timer',
+      });
     } else {
       await this.stopAlertTimer(AlertType.babyInCarWhenLeaving);
+      await service.request('/api/error', data: {
+        'error': '###Stop Timer',
+      });
       return;
     }
-    // await service.request('/api/error', data: {
-    //   'error': 'baby in car state:: ${chairState.babyInCar}',
-    // });
 
     if (!chairState.allClear && !this._hasPushedInstallError) {
       this._hasPushedInstallError = true;
@@ -136,9 +139,9 @@ class _HomeRootState extends State<HomeRoot> {
         AlertView.show(context, alertType);
         this.widget.chairControlInfo.clearChairState();
         this.widget.chairControlInfo.disconnect();
-        // await service.request('/api/error', data: {
-        //   'error': 'show disconnect alert::now',
-        // });
+        await service.request('/api/error', data: {
+          'error': '###show disconnect alert::now',
+        });
       });
     } else if (alertType == AlertType.installErr) {
       this.installErrAlertTimer?.cancel();

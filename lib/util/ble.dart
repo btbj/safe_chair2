@@ -8,7 +8,7 @@ import 'package:safe_chair2/model/Chair.dart';
 import 'package:rxdart/subjects.dart';
 // import 'package:safe_chair2/util/LogManager.dart';
 import 'package:safe_chair2/model/TemperatureMonitor.dart';
-// import 'package:safe_chair2/util/service.dart' as httpservice;
+import 'package:safe_chair2/util/service.dart' as httpservice;
 
 mixin BleMixin on ChangeNotifier {
   bool _notificationNoErr = false;
@@ -136,9 +136,9 @@ mixin BleMixin on ChangeNotifier {
     // _scanning = true;
     _scanSubscription =
         _flutterBlue.scan(timeout: Duration(seconds: 10)).listen((scanResult) {
-          if (Chair.checkMac(scanResult.device.name) != null) {
-            this._scanResults[scanResult.device.id] = scanResult;
-          }
+      if (Chair.checkMac(scanResult.device.name) != null) {
+        this._scanResults[scanResult.device.id] = scanResult;
+      }
       // print('found one');
       notifyListeners();
     }, onDone: stopScan);
@@ -184,10 +184,8 @@ mixin BleMixin on ChangeNotifier {
       if (s == BluetoothDeviceState.disconnected && this._device != null) {
         // reconnect
         if (connectingStateSubject.value == false) {
+          await this.stopScan();
           await this.scanToConnect(this._device.id);
-          // await httpservice.request('/api/error', data: {
-          //   'error': '###reconnecting info::targetChair:${this._device.id}',
-          // });
           // this.connect(this._device);
         }
       }
@@ -195,7 +193,9 @@ mixin BleMixin on ChangeNotifier {
 
     Future<bool> returnValue;
     try {
-      await targetDevice.connect(autoConnect: false).timeout(Duration(seconds: 150), onTimeout: () {
+      await targetDevice
+          .connect(autoConnect: false)
+          .timeout(Duration(seconds: 15), onTimeout: () {
         print('timeout');
         returnValue = Future.value(false);
         // targetDevice.disconnect();
@@ -209,6 +209,14 @@ mixin BleMixin on ChangeNotifier {
       }
     } finally {
       print('connected');
+      await httpservice.request('/api/error', data: {
+        'error': '###connecting success',
+      });
+
+      // 连接上立刻重置一次状态
+      if (_chairState != null) {
+        this.triggerStateCheck();
+      }
       await this.scanServices(targetDevice);
 
       connectingStateSubject.add(false);
@@ -278,52 +286,46 @@ mixin BleMixin on ChangeNotifier {
     await valueChangedSubscriptions?.cancel();
     valueChangedSubscriptions = null;
 
-    try {
-      List<BluetoothService> services = await targetDevice.discoverServices();
+    List<BluetoothService> services = await targetDevice.discoverServices();
 
-      for (BluetoothService service in services) {
-        List<BluetoothCharacteristic> chars = service.characteristics;
-        for (BluetoothCharacteristic char in chars) {
-          if (char.uuid.toString() == targetUUIDString) {
-            valueChangedSubscriptions = char.value.listen((List<int> value) {
-              this._value = value;
-              if (value.isNotEmpty && value.length == 6) {
-                this._chairState = ChairState(value);
-                
-                // targetDevice.writeCharacteristic(char, [0xbb, 0x01]);
-                notifyListeners();
-                // checkChairState();
-                this.showAlertDialog(null); // 传值无所谓，在页面上检查provider内数值
-              }
-            });
-            bool setNotifyResult = await char.setNotifyValue(true);
-            print(setNotifyResult);
-            // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
-            // await Future.delayed(Duration(seconds: 2));
-            char.write([0xaa, 0x01, 0xbb, 0xbc]);
-            // 完成操作后才重新赋值
-            this.targetChar = char;
-            this._device = targetDevice;
-            // await httpservice.request('/api/error', data: {
-            //   'error': '###connecting info::targetChair:$char, device: $targetDevice, setNotifyResult: $setNotifyResult',
-            // });
-          }
+    for (BluetoothService service in services) {
+      List<BluetoothCharacteristic> chars = service.characteristics;
+      for (BluetoothCharacteristic char in chars) {
+        if (char.uuid.toString() == targetUUIDString) {
+          valueChangedSubscriptions =
+              char.value.listen((List<int> value) async {
+            this._value = value;
+            if (value.isNotEmpty && value.length == 6) {
+              this._chairState = ChairState(value);
+
+              // targetDevice.writeCharacteristic(char, [0xbb, 0x01]);
+              notifyListeners();
+              // checkChairState();
+              this.triggerStateCheck(); // 传值无所谓，在页面上检查provider内数值
+              // await httpservice.request('/api/error', data: {
+              //   'error': '###got value::$value',
+              // });
+            }
+          });
+          bool setNotifyResult = await char.setNotifyValue(true);
+          print(setNotifyResult);
+          // targetDevice.writeCharacteristic(char, [0xaa, 0x01, 0xbb, 0xbc]);
+          // await Future.delayed(Duration(seconds: 2));
+          char.write([0xaa, 0x01, 0xbb, 0xbc]);
+          // 完成操作后才重新赋值
+          this.targetChar = char;
+          this._device = targetDevice;
         }
       }
-    } catch (e) {
-      print(e);
-      // has error in establish data connection
-      // do nothing, try skip
-      // await httpservice.request('/api/error', data: {
-      //   'error': '###connecting error::${e.toString()}',
-      // });
     }
-    
 
     return;
   }
 
   Future scanToConnect(DeviceIdentifier targetId) async {
+    await httpservice.request('/api/error', data: {
+      'error': '###start scan',
+    });
     this.scanConnectStateSubject.add(true);
     await stopScan();
     // await this.disconnect();
@@ -332,15 +334,18 @@ mixin BleMixin on ChangeNotifier {
     this.scanStateSubject.add(true);
     // this._scanning = true;
     _scanSubscription =
-        _flutterBlue.scan(timeout: Duration(seconds: 60)).listen(
+        _flutterBlue.scan(timeout: Duration(seconds: 150)).listen(
       (scanResult) async {
         if (scanResult.device.id == targetId &&
             scanResult.advertisementData.connectable) {
+          await this.stopScan();
+          await httpservice.request('/api/error', data: {
+            'error': '###found device start connect',
+          });
           await connect(scanResult.device);
           // this.scanStateSubject.add(false);
           // this._scanning = false;
         }
-        // notifyListeners();
       },
       onDone: () {
         if (this.scanConnectStateSubject.value) {
@@ -354,9 +359,9 @@ mixin BleMixin on ChangeNotifier {
     // notifyListeners();
   }
 
-  void showAlertDialog(AlertType alertType) {
+  void triggerStateCheck() {
     if (this._device == null) return;
-    this.alertSubject.add(alertType);
+    this.alertSubject.add(null);
   }
 
   // void setLeaveTimer() async {
