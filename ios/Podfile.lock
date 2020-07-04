@@ -1,11 +1,12 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_blue (0.0.1):
+  - flutter_blue (0.7.1):
     - Flutter
-    - flutter_blue/Protos (= 0.0.1)
-  - flutter_blue/Protos (0.0.1):
+    - flutter_blue/Protos (= 0.7.1)
+    - Protobuf (>= 3.9.2, ~> 3.9)
+  - flutter_blue/Protos (0.7.1):
     - Flutter
-    - Protobuf (~> 3.11.4)
+    - Protobuf (>= 3.9.2, ~> 3.9)
   - flutter_local_notifications (0.0.1):
     - Flutter
   - FMDB (2.7.5):
@@ -19,7 +20,7 @@ PODS:
     - Flutter
   - path_provider_macos (0.0.1):
     - Flutter
-  - Protobuf (3.11.4)
+  - Protobuf (3.12.0)
   - shared_preferences (0.0.1):
     - Flutter
   - shared_preferences_macos (0.0.1):
@@ -109,14 +110,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_blue: eeb381dc4727a0954dede73515f683865494b370
+  flutter_blue: a736f8e83f4f8baa29b92a7daaba97b3656e3d03
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
-  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
+  Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
@@ -129,6 +130,6 @@ SPEC CHECKSUMS:
   wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
   webview_flutter: d2b4d6c66968ad042ad94cbb791f5b72b4678a96
 
-PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
+PODFILE CHECKSUM: 59f923a7c5d63904f078501340d66bc5ec8ed887
 
 COCOAPODS: 1.8.4

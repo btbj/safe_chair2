@@ -89,7 +89,7 @@ mixin BleMixin on ChangeNotifier {
     this._notificationNoErr = await this.notificationManager.init();
     // await this._logManager.init();
     this._temperatureMonitor = await TemperatureMonitor.getMonitor();
-    // await _flutterBlue.setUniqueId('welldon_safe_chair');
+    await _flutterBlue.setUniqueId('welldon_safe_chair');
 
     _stateSubscription = _flutterBlue.state.listen((s) async {
       _state = s;
@@ -184,9 +184,9 @@ mixin BleMixin on ChangeNotifier {
       if (s == BluetoothDeviceState.disconnected && this._device != null) {
         // reconnect
         if (connectingStateSubject.value == false) {
-          await this.stopScan();
-          await this.scanToConnect(this._device.id);
-          // this.connect(this._device);
+          // await this.stopScan();
+          // await this.scanToConnect(this._device.id);
+          this.connect(this._device);
         }
       }
     });
@@ -194,8 +194,8 @@ mixin BleMixin on ChangeNotifier {
     Future<bool> returnValue;
     try {
       await targetDevice
-          .connect(autoConnect: false)
-          .timeout(Duration(seconds: 15), onTimeout: () {
+          .connect(autoConnect: true)
+          .timeout(Duration(seconds: 150), onTimeout: () {
         print('timeout');
         returnValue = Future.value(false);
         // targetDevice.disconnect();
