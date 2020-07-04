@@ -69,7 +69,7 @@ class NotificationManager {
   // }
 
   Future schedule(BuildContext context, AlertType type) async {
-    if (!noErr) return;
+    if (!noErr || context == null) return;
     int id = 1;
     String message = getMessage(context, type);
     String soundName = getSoundName(type);
