@@ -14,7 +14,7 @@
       "type": {}
     }
   },
-  "messageText": "{type,select, email_hint{请输入邮箱}password_hint{请输入密码}password_confirm_hint{请再次输入密码}code_hint{请输入验证码}register_to_agree{注册即代表阅读并同意}login_to_agree{登录即代表阅读并同意}url_invalid{无效的网址}no_product{未找到产品}error_none{无异常}error_no_signal{无座椅信号}error_low_battery{座椅电量过低}error_high_temp{座椅温度过高}error_low_temp{座椅温度过低}error_buckle{五点式卡扣异常}error_lfix{左ISOFIX接口异常}error_rfix{右ISOFIX接口异常}error_routation{旋转卡扣异常}error_pad{座椅坐垫异常}error_leg{支撑腿异常}alert_baby_in_car{您已经离开安全座椅，宝宝还在座位上， 请确认儿童是否离座！}alert_install_err{座椅安装不到位，请检查所有安装项！}alert_low_battery{座椅电量过低，请更换座椅电池！}alert_high_temp{座椅温度过高，请确认车内环境！}alert_low_temp{座椅温度过低，请确认车内环境！}notify_enter{进入座椅范围，打开APP检查座椅状态}notify_exit{退出座椅范围，请检查座椅状态}}",
+  "messageText": "{type,select, email_hint{请输入邮箱}password_hint{请输入密码}password_confirm_hint{请再次输入密码}code_hint{请输入验证码}register_to_agree{注册即代表阅读并同意}login_to_agree{登录即代表阅读并同意}url_invalid{无效的网址}no_product{未找到产品}error_none{无异常}error_no_signal{无座椅信号}error_low_battery{座椅电量过低}error_high_temp{座椅温度过高}error_low_temp{座椅温度过低}error_buckle{五点式卡扣异常}error_lfix{左ISOFIX接口异常}error_rfix{右ISOFIX接口异常}error_routation{旋转卡扣异常}error_pad{座椅坐垫异常}error_leg{支撑腿异常}alert_baby_in_car{您已离开安全座椅，请确认儿童是否离座，若您没有离开请检查蓝牙连接是否异常！}alert_install_err{座椅安装不到位，请检查所有安装项！}alert_low_battery{座椅电量过低，请更换座椅电池！}alert_high_temp{座椅温度过高，请确认车内环境！}alert_low_temp{座椅温度过低，请确认车内环境！}notify_enter{进入座椅范围，打开APP检查座椅状态}notify_exit{退出座椅范围，请检查座椅状态}}",
   "@messageText": {
     "type": "text",
     "placeholders": {
